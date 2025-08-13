@@ -10,9 +10,9 @@ export async function getMensaHTML(request?: MensaRequestPayload) {
   const date = request?.date ?? new Date();
 
   // Calculate the first day of the week (Monday)
-  const thisMonday = new Date(date);
+  const currentMonday = new Date(date);
   const mondayOffset = date.getDay() === 0 ? -6 : 1 - date.getDay();
-  thisMonday.setDate(date.getDate() + mondayOffset);
+  currentMonday.setDate(date.getDate() + mondayOffset);
 
   // Next Monday
   const nextMonday = new Date(date);
@@ -24,7 +24,7 @@ export async function getMensaHTML(request?: MensaRequestPayload) {
   formData.append("locId", (request?.mensaId ?? 1).toString());
   formData.append("lang", request?.lang ?? "de");
   formData.append("date", formatDate(date));
-  formData.append("startThisWeek", formatDate(thisMonday));
+  formData.append("startThisWeek", formatDate(currentMonday));
   formData.append("startNextWeek", formatDate(nextMonday));
 
   const url =

@@ -1,27 +1,86 @@
 export type Meal = {
   name: string;
-  category: string;
+  category: MealCategory;
   prices: {
-    students: string;
-    employees: string;
-    others: string;
+    student?: string;
+    employee?: string;
+    others?: string;
+    note?: string;
   };
-  types: (MealType | undefined)[];
-  allergies: string[];
-  co2: string;
+  types: MealType[];
+  allergies: Allergy[];
   nutrition: MealNutrition;
 };
 
-export type MealType =
-  | "VEGETARIAN"
-  | "VEGAN"
-  | "SCHWEIN"
-  | "RIND"
-  | "LAMM"
-  | "WILDFLEISCH"
-  | "GEFLÜGEL"
-  | "FISCH"
-  | "TINTENFISCH";
+export const mealCategories = [
+  "TOPF UND PFANNE",
+  "SATTMACHER",
+  "PRIMA KLIMA",
+  "FLEISCH UND FISCH",
+  "BEILAGE",
+  "SALATBUFFET",
+  "SALAT",
+  "DESSERT",
+  "PIZZA",
+  "PASTA",
+  "SNACKS",
+  "UNKNOWN",
+] as const;
+export type MealCategory = (typeof mealCategories)[number];
+
+export const mealTypes = [
+  "VEGETARIAN",
+  "VEGAN",
+  "SCHWEIN",
+  "RIND",
+  "LAMM",
+  "WILDFLEISCH",
+  "GEFLÜGEL",
+  "FISCH",
+  "TINTENFISCH",
+] as const;
+export type MealType = (typeof mealTypes)[number];
+
+export const allergies = [
+  "FARBSTOFF",
+  "KONSERVIERUNGSSTOFF",
+  "ANTIOXIDATIONSMITTEL",
+  "GESCHMACKSVERSTÄRKER",
+  "GESCHWEFELT",
+  "GESCHWÄRZT",
+  "GEWACHST",
+  "PHOSPHAT",
+  "SÜSSUNGSMITTEL",
+  "PHENYLALIN",
+  "KREBSTIERE",
+  "EIER",
+  "GELATINE (SCHWEIN)",
+  "GELATINE (RIND)",
+  "ERDNÜSSE",
+  "SOJA",
+  "MILCH",
+  "HASELNUSS",
+  "WALLNUSS",
+  "PISTAZIE",
+  "MANDEL",
+  "CASHEW",
+  "MACADEMIA",
+  "PEKANUS",
+  "SELLERIE",
+  "SENF",
+  "GLUTEN",
+  "SESAM",
+  "SCHWEFELDIOXID",
+  "SULFITE",
+  "LUPINE",
+  "WEICHTIERE",
+  "WEIZEN",
+  "HAFER",
+  "ROGGEN",
+  "DINKEL",
+  "FISCH",
+] as const;
+export type Allergy = (typeof allergies)[number];
 
 export type MealNutrition = {
   calories?: string;

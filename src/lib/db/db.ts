@@ -3,10 +3,10 @@
  * using orm Drizzle
  *
  * Run push with:
- * pnpm drizzle-kit push:pg
+ * pnpm drizzle-kit push
  *
  * Run generate with
- * pnpm drizzle-kit generate:pg
+ * pnpm drizzle-kit generate
  *
  * Edit data in ./drizzle.config.ts
  */
