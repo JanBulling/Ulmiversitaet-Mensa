@@ -58,11 +58,7 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {mensaMenu.map((category) => (
-              <MensaCategoryCard
-                key={category.category}
-                category={category}
-                allergies={false}
-              />
+              <MensaCategoryCard key={category.category} category={category} />
             ))}
           </div>
         )}

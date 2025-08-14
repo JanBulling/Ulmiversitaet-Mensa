@@ -5,7 +5,6 @@ import * as React from "react";
 import { cn, getStartOfWeek } from "@/lib/utils";
 import { Button } from "@/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { d } from "node_modules/drizzle-kit/index-BAUrj6Ib.mjs";
 
 const dateFormatter = new Intl.DateTimeFormat("de-DE", {
   weekday: "short",
