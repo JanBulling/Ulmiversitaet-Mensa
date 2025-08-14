@@ -66,7 +66,7 @@ export default function DateSelector({
         disabled={isPrevWeekDisabled}
         className={cn(
           "cursor-pointer",
-          isPrevWeekDisabled && "hidden md:invisible",
+          isPrevWeekDisabled && "hidden md:invisible md:block",
         )}
         onClick={() => handleWeekChange("prev")}
       >
@@ -95,7 +95,7 @@ export default function DateSelector({
         disabled={isNextWeekDisabled}
         className={cn(
           "cursor-pointer",
-          isNextWeekDisabled && "hidden md:invisible",
+          isNextWeekDisabled && "hidden md:invisible md:block",
         )}
         onClick={() => handleWeekChange("next")}
       >
