@@ -1,32 +1,34 @@
-import DailyMeals from "@/components/home/daily-meals";
-import DateSelector from "@/components/home/date-selector";
-import { Suspense } from "react";
+import { MensaMenu } from "@/components/home/mensa-menu";
+import { getMenuForDate } from "@/lib/db-integration/get-for-date";
 
-export default async function Home({
-  searchParams,
-}: {
+interface HomeProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+}
+
+export default async function Home({ searchParams }: HomeProps) {
   const { date } = await searchParams;
-  let selectedDate = date ? new Date(date as string) : new Date();
-  if (isNaN(selectedDate.getTime())) {
+
+  let selectedDate: Date;
+  if (date !== undefined) {
+    if (typeof date === "string") {
+      selectedDate = new Date(date);
+    } else {
+      selectedDate = new Date(date[0]);
+    }
+
+    if (isNaN(selectedDate.getTime())) {
+      selectedDate = new Date();
+    }
+  } else {
     selectedDate = new Date();
   }
   selectedDate.setHours(8, 0, 0, 0);
 
-  // const mensaPlan = await getPlanForDate(selectedDate);
-  const formattedDate = new Intl.DateTimeFormat("de-DE", {
-    dateStyle: "full",
-  }).format(selectedDate);
+  const initialMensaMenu = await getMenuForDate(selectedDate);
 
   return (
-    <div className="mt-4 w-full">
-      <DateSelector selectedDate={selectedDate} />
-      <h2 className="mx-auto my-4 text-xl font-semibold">{formattedDate}</h2>
-
-      <Suspense fallback={<p>Loading</p>}>
-        <DailyMeals date={selectedDate} />
-      </Suspense>
+    <div className="my-4 w-full">
+      <MensaMenu initialMenu={initialMensaMenu} initialDate={selectedDate} />
     </div>
   );
 }

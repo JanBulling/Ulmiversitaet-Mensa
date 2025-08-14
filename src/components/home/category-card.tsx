@@ -3,6 +3,7 @@ import { Category } from "@/types/category";
 import { MealCategory } from "@/types/meal";
 import { Separator } from "@/ui/separator";
 import { CookingPot, Ham, Leaf, Salad, Utensils } from "lucide-react";
+import { AllergyIcon } from "./allergy-icon";
 
 const categoryIconMap: Record<MealCategory, React.ElementType | null> = {
   SATTMACHER: () => <Utensils />,
@@ -36,8 +37,10 @@ const categoryColorMap: Record<MealCategory, string> = {
 
 export default function MensaCategoryCard({
   category,
+  allergies,
 }: {
   category: Category;
+  allergies: boolean;
 }) {
   return (
     <div className="bg-card rounded-md px-4 py-2 shadow-sm">
@@ -68,7 +71,7 @@ export default function MensaCategoryCard({
                   {meal.nutrition.calories}kcal
                 </p>
               )}
-              <Separator orientation="vertical" />
+
               {meal.nutrition.protein && (
                 <p className="text-xs text-gray-500">
                   <span className="font-semibold">Protein:</span>{" "}
@@ -76,6 +79,13 @@ export default function MensaCategoryCard({
                 </p>
               )}
             </div>
+            {allergies && (
+              <div className="mt-1 flex flex-wrap gap-2 text-xs">
+                {meal.allergies.map((a) => (
+                  <AllergyIcon allergy={a} />
+                ))}
+              </div>
+            )}
           </li>
         ))}
       </ul>

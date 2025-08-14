@@ -3,7 +3,7 @@ import { db } from "../db/db";
 import { mealsTable, mensaPlanTable } from "../db/schema";
 import { categoriesOrder, Category } from "@/types/category";
 
-export async function getPlanForDate(date: Date): Promise<Category[]> {
+export async function getMenuForDate(date: Date): Promise<Category[]> {
   date.setHours(8, 0, 0, 0);
 
   const mealsResponse = await db

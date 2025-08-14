@@ -1,95 +1,91 @@
 "use client";
 
+import * as React from "react";
+
 import { cn, getStartOfWeek } from "@/lib/utils";
 import { Button } from "@/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-// import { useRouter } from "next/navigation";
+import { d } from "node_modules/drizzle-kit/index-BAUrj6Ib.mjs";
 
-export default function DateSelector({ selectedDate }: { selectedDate: Date }) {
-  // const router = useRouter();
+const dateFormatter = new Intl.DateTimeFormat("de-DE", {
+  weekday: "short",
+  day: "2-digit",
+  month: "2-digit",
+});
 
-  const todayDate = new Date();
-  const nextWeekDate = new Date();
-  nextWeekDate.setDate(todayDate.getDate() + 7);
+interface DateSelectorProps {
+  date: Date;
+  onDateChange: (date: Date) => void;
+}
 
-  const startOfNextWeek = getStartOfWeek(nextWeekDate);
-  const startOfThisWeek = getStartOfWeek(todayDate);
-  const startOfSelectedWeek = getStartOfWeek(selectedDate);
+export default function DateSelector({
+  date,
+  onDateChange,
+}: DateSelectorProps) {
+  const today = new Date();
+  const nextWeekDay = new Date();
+  nextWeekDay.setDate(nextWeekDay.getDate() + 7);
 
-  function handleDateChange(newDate: Date) {
-    const searchParams = newDate.toISOString().split("T")[0];
-    // router.replace(`/?date=${searchParams}`);
-    // router.refresh();
+  const startOfSelectedWeek = getStartOfWeek(date);
+  const startOfTodayWeek = getStartOfWeek(today);
+  const startOfNextWeek = getStartOfWeek(nextWeekDay);
 
-    window.location.href = `/?date=${searchParams}`;
+  function getWeekDays() {
+    const result = [];
+
+    const mondayOfWeek = getStartOfWeek(date);
+
+    for (let i = 0; i < 5; i++) {
+      const day = new Date(mondayOfWeek);
+      day.setDate(mondayOfWeek.getDate() + i);
+      result.push(day);
+    }
+
+    return result;
   }
 
   function handleWeekChange(direction: "next" | "prev") {
-    const currentDate = new Date(selectedDate);
-    currentDate.setDate(
-      currentDate.getDate() + (direction === "next" ? 7 : -7),
+    const dayInNewWeek = new Date(date);
+    dayInNewWeek.setDate(
+      dayInNewWeek.getDate() + (direction === "next" ? 7 : -7),
     );
-    const mondayOfUpdatedWeek = getStartOfWeek(currentDate);
-    handleDateChange(mondayOfUpdatedWeek);
+
+    const mondayNewWeek = getStartOfWeek(dayInNewWeek);
+    onDateChange(mondayNewWeek);
   }
-
-  function getWeekDays() {
-    const week = [];
-
-    for (let i = 0; i < 5; i++) {
-      // Monday to Friday
-      const day = new Date(startOfSelectedWeek);
-      day.setDate(startOfSelectedWeek.getDate() + i);
-      week.push(day);
-    }
-
-    return week;
-  }
-
-  const weekDays = getWeekDays();
-  const formatter = new Intl.DateTimeFormat("de-DE", {
-    weekday: "short",
-    day: "2-digit",
-    month: "2-digit",
-  });
 
   const isNextWeekDisabled =
     startOfSelectedWeek.getTime() >= startOfNextWeek.getTime();
   const isPrevWeekDisabled =
-    startOfSelectedWeek.getTime() <= startOfThisWeek.getTime();
+    startOfSelectedWeek.getTime() <= startOfTodayWeek.getTime();
 
   return (
-    <div className="bg-card sticky top-4 z-10 mb-8 flex justify-between rounded-xl p-4 shadow-md">
+    <div className="bg-card no-scrollbar sticky top-4 z-10 mx-2 mb-8 flex max-w-screen-xl justify-between gap-2 overflow-x-scroll rounded-xl p-4 shadow-md md:mx-auto">
       <Button
         variant="outline"
         size="icon"
         disabled={isPrevWeekDisabled}
         className={cn(
-          "hover:cursor-pointer",
-          isPrevWeekDisabled && "invisible",
+          "cursor-pointer",
+          isPrevWeekDisabled && "hidden md:invisible",
         )}
         onClick={() => handleWeekChange("prev")}
       >
         <ChevronLeft className="size-5" />
       </Button>
       <div className="flex items-center justify-center gap-1">
-        {weekDays.map((day) => {
-          const dateString = day.toISOString().split("T")[0];
-          const isToday = day.toDateString() === todayDate.toDateString();
-          const isSelected = day.toDateString() === selectedDate.toDateString();
+        {getWeekDays().map((day) => {
+          const isSelected = date.toDateString() === day.toDateString();
+          const isToday = today.toDateString() === day.toDateString();
 
           return (
             <Button
-              key={dateString}
-              variant="ghost"
-              onClick={() => handleDateChange(day)}
-              className={cn(
-                "hover:cursor-pointer",
-                isSelected && "bg-primary text-primary-foreground",
-                isToday && "bg-accent text-accent-foreground",
-              )}
+              key={day.getDate()}
+              variant={isSelected ? "default" : isToday ? "accent" : "ghost"}
+              className="cursor-pointer"
+              onClick={() => onDateChange(day)}
             >
-              {isToday ? "Heute" : formatter.format(day)}
+              {isToday ? "Heute" : dateFormatter.format(day)}
             </Button>
           );
         })}
@@ -99,8 +95,8 @@ export default function DateSelector({ selectedDate }: { selectedDate: Date }) {
         size="icon"
         disabled={isNextWeekDisabled}
         className={cn(
-          "hover:cursor-pointer",
-          isNextWeekDisabled && "invisible",
+          "cursor-pointer",
+          isNextWeekDisabled && "hidden md:invisible",
         )}
         onClick={() => handleWeekChange("next")}
       >
