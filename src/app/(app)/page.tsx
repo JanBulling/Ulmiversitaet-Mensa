@@ -2,14 +2,13 @@ import DailyMeals from "@/components/home/daily-meals";
 import DateSelector from "@/components/home/date-selector";
 import { Suspense } from "react";
 
-export default function Home({
+export default async function Home({
   searchParams,
 }: {
-  searchParams: { date?: string };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  let selectedDate = searchParams?.date
-    ? new Date(searchParams?.date)
-    : new Date();
+  const { date } = await searchParams;
+  let selectedDate = date ? new Date(date as string) : new Date();
   if (isNaN(selectedDate.getTime())) {
     selectedDate = new Date();
   }
