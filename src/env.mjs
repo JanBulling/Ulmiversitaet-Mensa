@@ -9,6 +9,8 @@ const server = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
 
   NEON_DATABASE_URL: z.string(),
+
+  CRON_SECRET_TOKEN: z.string(),
 });
 
 /**
@@ -27,6 +29,8 @@ const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
 
   NEON_DATABASE_URL: process.env.NEON_DATABASE_URL,
+
+  CRON_SECRET_TOKEN: process.env.CRON_SECRET_TOKEN,
 };
 
 const merged = server.merge(client);

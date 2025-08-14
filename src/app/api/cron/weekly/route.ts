@@ -1,3 +1,7 @@
+import { NextRequest } from "next/server";
+
+import { env } from "@/env.mjs";
+
 import { saveMealsToDb } from "@/lib/db-integration/save-to-db";
 import { parseMensaHTML } from "@/lib/scraper/studienwerk-parser";
 import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
@@ -7,7 +11,20 @@ import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
  *
  * Fetches the weekly meal plan from the mensa website FOR THE NEXT WEEK and saves it to the database.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const tokenQuery = searchParams.get("token");
+
+  if (tokenQuery !== env.CRON_SECRET_TOKEN) {
+    return Response.json(
+      {
+        success: false,
+        message: "Invalid or missing token.",
+      },
+      { status: 401 },
+    );
+  }
+
   const today = new Date();
   const nextMonday = new Date(today);
   nextMonday.setDate(today.getDate() + ((1 + 7 - today.getDay()) % 7));
@@ -38,8 +55,7 @@ export async function GET() {
     return Response.json(
       {
         success: false,
-        message: "Failed to save weekly meal plan.",
-        error: error instanceof Error ? error.message : "Unknown error",
+        message: "Failed to save weekly meal plan. See console for details.",
       },
       { status: 500 },
     );
