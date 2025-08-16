@@ -86,16 +86,13 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
                 );
               } else {
                 return (
-                  <>
+                  <React.Fragment key={category.category}>
                     <Separator
                       orientation="horizontal"
                       className="col-span-full"
                     />
-                    <MensaCategoryList
-                      key={category.category}
-                      category={category}
-                    />
-                  </>
+                    <MensaCategoryList category={category} />
+                  </React.Fragment>
                 );
               }
             })}

@@ -2,6 +2,7 @@ import { Category } from "@/types/category";
 import { categoryColorMap, CategoryIcon } from "./category-icon";
 import Link from "next/link";
 import { generateSlug } from "@/lib/utils";
+import { Rating } from "@/ui/rating";
 
 interface MensaCategoryListProps {
   category: Category;
@@ -25,7 +26,15 @@ export default function MensaCategoryList({
         {category.meals.map((meal) => (
           <Link key={meal.name} href={`/meal/${generateSlug(meal.name)}`}>
             <li className="bg-card hover:bg-muted cursor-pointer rounded-md px-4 py-2 shadow-md">
-              <h4 className="text-lg font-semibold">{meal.name}</h4>
+              <div className="flex flex-col justify-between md:flex-row">
+                <h4 className="text-lg font-semibold">{meal.name}</h4>
+                <Rating
+                  value={meal.rating ?? 0}
+                  maxRating={5}
+                  showNumber
+                  numberRatings={meal.numberRatings ?? 0}
+                />
+              </div>
               <p className="text-sm text-gray-500">
                 {meal.prices.note} {meal.prices.student}€ |{" "}
                 {meal.prices.employee}€ | {meal.prices.others}€

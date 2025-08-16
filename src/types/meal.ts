@@ -10,6 +10,8 @@ export type Meal = {
   types: MealType[];
   allergies: Allergy[];
   nutrition: MealNutrition;
+  rating?: number | null;
+  numberRatings?: number | null;
 };
 
 export const mealCategories = [

@@ -2,9 +2,11 @@ import { allergies, mealCategories, mealTypes } from "@/types/meal";
 import {
   date,
   index,
+  integer,
   numeric,
   pgEnum,
   pgTableCreator,
+  real,
   serial,
   text,
   timestamp,
@@ -45,7 +47,11 @@ export const mealsTable = pgTable(
     nutrition_saturated_fat: text("nutrition_saturated_fat"),
     nutrition_salt: text("nutrition_salt"),
 
-    rating: numeric("rating"),
+    rating_taste: real("rating_taste"),
+    rating_price: real("rating_price"),
+    rating_look: real("rating_look"),
+    rating_total: real("rating_total"),
+    num_ratings: integer("num_ratings"),
 
     created_at: timestamp("created_at").defaultNow().notNull(),
     updated_at: timestamp("updated_at")

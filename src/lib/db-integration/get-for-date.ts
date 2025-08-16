@@ -39,6 +39,8 @@ export async function getMenuForDate(date: Date): Promise<Category[]> {
           salt: meal.nutrition_salt ?? undefined,
         },
         allergies: meal.allergies,
+        rating: meal.rating_total,
+        numberRatings: meal.num_ratings,
       });
     } else {
       categories.push({

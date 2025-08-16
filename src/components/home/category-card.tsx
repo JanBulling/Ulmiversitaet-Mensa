@@ -1,9 +1,8 @@
-import { cn, generateSlug } from "@/lib/utils";
+import { generateSlug } from "@/lib/utils";
 import { Category } from "@/types/category";
-import { MealCategory } from "@/types/meal";
-import { CookingPot, Ham, Leaf, Salad, Utensils } from "lucide-react";
 import { categoryColorMap, CategoryIcon } from "./category-icon";
 import Link from "next/link";
+import { Rating } from "@/ui/rating";
 
 export default function MensaCategoryCard({
   category,
@@ -18,14 +17,22 @@ export default function MensaCategoryCard({
     <Link key={meal.name} href={`/meal/${generateSlug(meal.name)}`}>
       <div className="bg-card hover:bg-muted h-full cursor-pointer rounded-md px-4 py-2 shadow-sm">
         <div
-          className={cn("flex items-center gap-2 font-semibold")}
+          className="flex flex-col justify-between md:flex-row"
           style={{ color: categoryColorMap[category.category] ?? "#3f3f3f" }}
         >
-          <h3>{category.category}</h3>
-          <CategoryIcon category={category.category} size={20} />
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold">{category.category}</h3>
+            <CategoryIcon category={category.category} size={20} />
+          </div>
+          <Rating
+            value={meal.rating ?? 0}
+            maxRating={5}
+            showNumber
+            numberRatings={meal.numberRatings ?? 0}
+          />
         </div>
 
-        <h4 className="text-lg font-semibold">{meal.name}</h4>
+        <h4 className="mt-2 text-lg font-semibold">{meal.name}</h4>
         <p className="text-sm text-gray-500">
           {meal.prices.note} {meal.prices.student}€ | {meal.prices.employee}€ |{" "}
           {meal.prices.others}€
