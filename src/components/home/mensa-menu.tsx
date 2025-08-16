@@ -5,6 +5,10 @@ import * as React from "react";
 import { Category } from "@/types/category";
 import DateSelector from "./date-selector";
 import MensaCategoryCard from "./category-card";
+import { Skeleton } from "@/ui/Skeleton";
+import { MealCategory } from "@/types/meal";
+import MensaCategoryList from "./category-list";
+import { Separator } from "@/ui/separator";
 
 interface MensaMenuProps {
   initialMenu: Category[];
@@ -14,6 +18,13 @@ interface MensaMenuProps {
 const dateFormatter = new Intl.DateTimeFormat("de-DE", {
   dateStyle: "full",
 });
+
+const useSingleCard: MealCategory[] = [
+  "SATTMACHER",
+  "PRIMA KLIMA",
+  "FLEISCH UND FISCH",
+  "TOPF UND PFANNE",
+];
 
 export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
   const [mensaMenu, setMensaMenu] = React.useState<Category[]>(initialMenu);
@@ -27,7 +38,7 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
 
     try {
       const response = await fetch(`/api/v1?date=${dateString}`, {
-        cache: "no-cache",
+        cache: "force-cache",
       });
       const mensaMenuResponse = await response.json();
 
@@ -54,12 +65,40 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
         </h2>
 
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {mensaMenu.map((category) => (
-              <MensaCategoryCard key={category.category} category={category} />
-            ))}
+            {mensaMenu.map((category) => {
+              if (
+                useSingleCard.includes(category.category) &&
+                category.meals.length === 1
+              ) {
+                return (
+                  <MensaCategoryCard
+                    key={category.category}
+                    category={category}
+                  />
+                );
+              } else {
+                return (
+                  <>
+                    <Separator
+                      orientation="horizontal"
+                      className="col-span-full"
+                    />
+                    <MensaCategoryList
+                      key={category.category}
+                      category={category}
+                    />
+                  </>
+                );
+              }
+            })}
           </div>
         )}
       </div>

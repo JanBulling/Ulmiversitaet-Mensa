@@ -5,7 +5,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-background relative flex min-h-svh flex-col">
       <SiteHeader />
-      <main className="w-full">{children}</main>
+      <main className="min-h-screen w-full">{children}</main>
       <SiteFooter />
     </div>
   );

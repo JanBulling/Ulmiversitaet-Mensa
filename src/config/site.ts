@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Mensa Ulm",
   url: "https://mensa.ulmiversitaet.de",
-  ogImage: "https://mensa.ulmiversitaet.de/og.jpg",
+  ogImage: "https://mensa.ulmiversitaet.de/og",
   description: "Mensaplan der Universität Ulm",
   links: {
     github: "https://github.com/janbulling/ulmiversitaet-mensa",

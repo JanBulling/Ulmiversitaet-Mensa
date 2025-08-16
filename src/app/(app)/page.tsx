@@ -21,13 +21,18 @@ export default async function Home({ searchParams }: HomeProps) {
     }
   } else {
     selectedDate = new Date();
+    if (selectedDate.getDay() === 6) {
+      selectedDate.setDate(selectedDate.getDate() + 2);
+    } else if (selectedDate.getDay() === 0) {
+      selectedDate.setDate(selectedDate.getDate() + 1);
+    }
   }
   selectedDate.setHours(8, 0, 0, 0);
 
   const initialMensaMenu = await getMenuForDate(selectedDate);
 
   return (
-    <div className="my-4 w-full">
+    <div className="my-4">
       <MensaMenu initialMenu={initialMensaMenu} initialDate={selectedDate} />
     </div>
   );

@@ -2,6 +2,7 @@ import { allergies, mealCategories, mealTypes } from "@/types/meal";
 import {
   date,
   index,
+  numeric,
   pgEnum,
   pgTableCreator,
   serial,
@@ -10,7 +11,6 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { sl } from "zod/locales";
 
 const pgTable = pgTableCreator((name) => `mensa_${name}`);
 
@@ -45,16 +45,18 @@ export const mealsTable = pgTable(
     nutrition_saturated_fat: text("nutrition_saturated_fat"),
     nutrition_salt: text("nutrition_salt"),
 
+    rating: numeric("rating"),
+
     created_at: timestamp("created_at").defaultNow().notNull(),
     updated_at: timestamp("updated_at")
       .defaultNow()
       .notNull()
       .$onUpdate(() => new Date()),
   },
-  (table) => ({
-    slugIdx: uniqueIndex("slug_idx").on(table.slug),
-    nameIdx: index("name_idx").on(table.name),
-  }),
+  (table) => [
+    uniqueIndex("slug_idx").on(table.slug),
+    index("name_idx").on(table.name),
+  ],
 );
 
 export const mensaPlanTable = pgTable(
@@ -66,10 +68,30 @@ export const mensaPlanTable = pgTable(
       .references(() => mealsTable.id)
       .notNull(),
   },
-  (table) => ({
-    dateMealIdIdx: uniqueIndex("date_meal_id_idx").on(
-      table.date,
-      table.meal_id,
-    ),
-  }),
+  (table) => [
+    index("plan_meal_id_idx").on(table.meal_id),
+    uniqueIndex("date_meal_id_idx").on(table.date, table.meal_id),
+  ],
+);
+
+export const ratingsTable = pgTable(
+  "ratings",
+  {
+    id: serial("id").primaryKey(),
+    text: text("text"),
+    rating: numeric("rating").notNull(),
+
+    meal_id: uuid("meal_id")
+      .references(() => mealsTable.id)
+      .notNull(),
+
+    created_at: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updated_at: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [index("rating_meal_id_idx").on(table.meal_id)],
 );
