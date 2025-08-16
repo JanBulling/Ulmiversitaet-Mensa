@@ -121,7 +121,7 @@ export default async function MealPage({ params }: MealPageProps) {
         <h3 className="text-xl font-bold">Allergien</h3>
         <div className="flex flex-wrap gap-4">
           {meal.allergies.map((a) => (
-            <p>{a}</p>
+            <p key={a}>{a}</p>
           ))}
         </div>
       </div>
