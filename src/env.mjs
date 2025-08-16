@@ -10,7 +10,7 @@ const server = z.object({
 
   NEON_DATABASE_URL: z.string(),
 
-  CRON_SECRET_TOKEN: z.string(),
+  CRON_SECRET: z.string(),
 });
 
 /**
@@ -30,7 +30,7 @@ const processEnv = {
 
   NEON_DATABASE_URL: process.env.NEON_DATABASE_URL,
 
-  CRON_SECRET_TOKEN: process.env.CRON_SECRET_TOKEN,
+  CRON_SECRET: process.env.CRON_SECRET_TOKEN,
 };
 
 const merged = server.merge(client);

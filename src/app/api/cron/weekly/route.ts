@@ -12,17 +12,12 @@ import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
  * Fetches the weekly meal plan from the mensa website FOR THE NEXT WEEK and saves it to the database.
  */
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const tokenQuery = searchParams.get("token");
+  const authHeader = request.headers.get("authorization");
 
-  if (tokenQuery !== env.CRON_SECRET_TOKEN) {
-    return Response.json(
-      {
-        success: false,
-        message: "Invalid or missing token.",
-      },
-      { status: 401 },
-    );
+  if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
   }
 
   const today = new Date();
