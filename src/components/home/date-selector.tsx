@@ -14,7 +14,7 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE", {
 
 interface DateSelectorProps {
   date: Date;
-  onDateChange: (date: Date) => void;
+  onDateChange?: (date: Date) => void;
 }
 
 export default function DateSelector({
@@ -50,7 +50,7 @@ export default function DateSelector({
     );
 
     const mondayNewWeek = getStartOfWeek(dayInNewWeek);
-    onDateChange(mondayNewWeek);
+    onDateChange?.(mondayNewWeek);
   }
 
   const isNextWeekDisabled =
@@ -82,7 +82,7 @@ export default function DateSelector({
               key={day.getDate()}
               variant={isSelected ? "default" : isToday ? "accent" : "ghost"}
               className="cursor-pointer"
-              onClick={() => onDateChange(day)}
+              onClick={() => onDateChange?.(day)}
             >
               {isToday ? "Heute" : dateFormatter.format(day)}
             </Button>

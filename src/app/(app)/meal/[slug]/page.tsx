@@ -1,3 +1,4 @@
+import SiteLayout from "@/components/general/site-layout";
 import {
   categoryColorMap,
   CategoryIcon,
@@ -27,7 +28,7 @@ export default async function MealPage({ params }: MealPageProps) {
   const meal = mealResponse[0];
 
   return (
-    <div className="mx-auto my-4 max-w-screen-xl">
+    <SiteLayout className="my-4">
       <h1 className="text-2xl font-bold">{meal.name}</h1>
       <div className="flex items-center gap-2">
         <CategoryIcon category={meal.category} />
@@ -125,6 +126,6 @@ export default async function MealPage({ params }: MealPageProps) {
           ))}
         </div>
       </div>
-    </div>
+    </SiteLayout>
   );
 }

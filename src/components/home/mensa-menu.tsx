@@ -9,6 +9,7 @@ import { Skeleton } from "@/ui/Skeleton";
 import { MealCategory } from "@/types/meal";
 import MensaCategoryList from "./category-list";
 import { Separator } from "@/ui/separator";
+import SiteLayout from "../general/site-layout";
 
 interface MensaMenuProps {
   initialMenu: Category[];
@@ -59,7 +60,7 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
         }}
         date={date}
       />
-      <div className="mx-auto max-w-screen-xl px-4 md:px-12">
+      <SiteLayout>
         <h2 className="mx-auto my-4 text-xl font-semibold">
           {dateFormatter.format(date)}
         </h2>
@@ -98,7 +99,7 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
             })}
           </div>
         )}
-      </div>
+      </SiteLayout>
     </>
   );
 }

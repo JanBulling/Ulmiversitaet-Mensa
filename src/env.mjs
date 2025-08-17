@@ -30,7 +30,7 @@ const processEnv = {
 
   NEON_DATABASE_URL: process.env.NEON_DATABASE_URL,
 
-  CRON_SECRET: process.env.CRON_SECRET_TOKEN,
+  CRON_SECRET: process.env.CRON_SECRET,
 };
 
 const merged = server.merge(client);

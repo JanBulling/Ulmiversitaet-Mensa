@@ -1,5 +1,8 @@
 import Logo from "@/ui/logo";
 import { ModeSwitcher } from "./mode-switcher";
+import Link from "next/link";
+import { Settings } from "lucide-react";
+import { Button } from "@/ui/button";
 
 export function SiteHeader() {
   return (
@@ -13,6 +16,12 @@ export function SiteHeader() {
 
           <div className="ml-auto flex items-center justify-end gap-2">
             <ModeSwitcher />
+            <Link href="/settings">
+              <Button variant="outline" size="icon" className="cursor-pointer">
+                <Settings />
+                <span className="sr-only">Settings</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </header>

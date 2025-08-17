@@ -3,6 +3,7 @@ import { Category } from "@/types/category";
 import { categoryColorMap, CategoryIcon } from "./category-icon";
 import Link from "next/link";
 import { Rating } from "@/ui/rating";
+import { useSettings } from "@/hooks/use-settings";
 
 export default function MensaCategoryCard({
   category,
@@ -12,6 +13,20 @@ export default function MensaCategoryCard({
   // allergies: boolean;
 }) {
   const meal = category.meals[0];
+
+  const { priceType, hideBadMeals } = useSettings();
+
+  if (
+    hideBadMeals &&
+    meal.numberRatings &&
+    meal.numberRatings > 0 &&
+    meal.rating &&
+    meal.rating <= 2.5
+  ) {
+    return null;
+  }
+
+  const priceString = `${meal.prices.note ?? ""} ${priceType === "EMPLOYEE" ? meal.prices.employee : priceType === "OTHER" ? meal.prices.others : meal.prices.student}€`;
 
   return (
     <Link key={meal.name} href={`/meal/${generateSlug(meal.name)}`}>
@@ -33,21 +48,18 @@ export default function MensaCategoryCard({
         </div>
 
         <h4 className="mt-2 text-lg font-semibold">{meal.name}</h4>
-        <p className="text-sm text-gray-500">
-          {meal.prices.note} {meal.prices.student}€ | {meal.prices.employee}€ |{" "}
-          {meal.prices.others}€
-        </p>
+        <p className="text-normal font-semibold">{priceString.trim()}</p>
 
         <div className="mt-1 flex h-3 items-center gap-2">
           {meal.nutrition.calories && (
-            <p className="text-xs text-gray-500">
+            <p className="text-muted-foreground text-xs">
               <span className="font-semibold">Calories:</span>{" "}
               {meal.nutrition.calories}kcal
             </p>
           )}
 
           {meal.nutrition.protein && (
-            <p className="text-xs text-gray-500">
+            <p className="text-muted-foreground text-xs">
               <span className="font-semibold">Protein:</span>{" "}
               {meal.nutrition.protein}g
             </p>
