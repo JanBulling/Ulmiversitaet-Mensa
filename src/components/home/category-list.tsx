@@ -1,9 +1,10 @@
-import { Category } from "@/types/category";
-import { categoryColorMap, CategoryIcon } from "./category-icon";
+import { Category, mealCategoryColorMap } from "@/types/category";
+import { CategoryIcon } from "../icons/category-icon";
 import Link from "next/link";
 import { generateSlug } from "@/lib/utils";
 import { Rating } from "@/ui/rating";
 import { useSettings } from "@/hooks/use-settings";
+import { MealTypeIcon } from "../icons/meal-type-icon";
 
 interface MensaCategoryListProps {
   category: Category;
@@ -20,7 +21,9 @@ export default function MensaCategoryList({
         <CategoryIcon size={20} category={category.category} />
         <h3
           className="text-xl font-semibold"
-          style={{ color: categoryColorMap[category.category] ?? "#3f3f3f" }}
+          style={{
+            color: mealCategoryColorMap[category.category] ?? "#3f3f3f",
+          }}
         >
           {category.category}
         </h3>
@@ -43,7 +46,14 @@ export default function MensaCategoryList({
             <Link key={meal.name} href={`/meal/${generateSlug(meal.name)}`}>
               <li className="bg-card hover:bg-muted cursor-pointer rounded-md px-4 py-2 shadow-md">
                 <div className="flex flex-col justify-between md:flex-row">
-                  <h4 className="text-lg font-semibold">{meal.name}</h4>
+                  <div className="flex items-center justify-between md:justify-start md:gap-2">
+                    <h4 className="text-lg font-semibold">{meal.name}</h4>
+                    <div className="flex items-center gap-2">
+                      {meal.types.map((type) => (
+                        <MealTypeIcon key={type} mealType={type} />
+                      ))}
+                    </div>
+                  </div>
                   <Rating
                     value={meal.rating ?? 0}
                     maxRating={5}

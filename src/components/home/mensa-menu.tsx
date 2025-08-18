@@ -6,7 +6,7 @@ import { Category } from "@/types/category";
 import DateSelector from "./date-selector";
 import MensaCategoryCard from "./category-card";
 import { Skeleton } from "@/ui/Skeleton";
-import { MealCategory } from "@/types/meal";
+import { MealCategory } from "@/types/category";
 import MensaCategoryList from "./category-list";
 import { Separator } from "@/ui/separator";
 import SiteLayout from "../general/site-layout";

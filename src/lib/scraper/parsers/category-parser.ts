@@ -1,4 +1,4 @@
-import { MealCategory } from "@/types/meal";
+import { MealCategory } from "@/types/category";
 
 export function parseCategoryDiv(div: Element): MealCategory {
   if (!div.classList.contains("gruppenkopf")) {

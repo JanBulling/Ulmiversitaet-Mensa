@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Allergy } from "@/types/meal";
+import { Allergy } from "@/types/allergy";
 import { Egg, Milk, Nut, TriangleAlert, Wheat } from "lucide-react";
 
 const allergyIconMap: Partial<Record<Allergy, React.ComponentType>> = {

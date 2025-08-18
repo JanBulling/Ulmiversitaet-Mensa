@@ -1,10 +1,8 @@
 import SiteLayout from "@/components/general/site-layout";
-import {
-  categoryColorMap,
-  CategoryIcon,
-} from "@/components/home/category-icon";
+import { CategoryIcon } from "@/components/icons/category-icon";
 import { db } from "@/lib/db/db";
 import { mealsTable } from "@/lib/db/schema";
+import { mealCategoryColorMap } from "@/types/category";
 import { Rating } from "@/ui/rating";
 import { Separator } from "@/ui/separator";
 import { eq } from "drizzle-orm";
@@ -33,7 +31,7 @@ export default async function MealPage({ params }: MealPageProps) {
       <div className="flex items-center gap-2">
         <CategoryIcon category={meal.category} />
         <p
-          style={{ color: categoryColorMap[meal.category] }}
+          style={{ color: mealCategoryColorMap[meal.category] }}
           className="font-semibold"
         >
           {meal.category}

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/db";
 import { mealsTable, mensaPlanTable } from "../db/schema";
-import { categoriesOrder, Category } from "@/types/category";
+import { Category, mealCategories } from "@/types/category";
 
 export async function getMenuForDate(date: Date): Promise<Category[]> {
   date.setHours(8, 0, 0, 0);
@@ -75,7 +75,7 @@ export async function getMenuForDate(date: Date): Promise<Category[]> {
 
   categories.sort((a, b) => {
     return (
-      categoriesOrder.indexOf(a.category) - categoriesOrder.indexOf(b.category)
+      mealCategories.indexOf(a.category) - mealCategories.indexOf(b.category)
     );
   });
 

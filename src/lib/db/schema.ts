@@ -1,4 +1,6 @@
-import { allergies, mealCategories, mealTypes } from "@/types/meal";
+import { allergies } from "@/types/allergy";
+import { mealCategories } from "@/types/category";
+import { mealTypes } from "@/types/meal-types";
 import {
   date,
   index,

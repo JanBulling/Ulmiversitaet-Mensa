@@ -1,16 +1,15 @@
 import { generateSlug } from "@/lib/utils";
-import { Category } from "@/types/category";
-import { categoryColorMap, CategoryIcon } from "./category-icon";
+import { Category, mealCategoryColorMap } from "@/types/category";
+import { CategoryIcon } from "../icons/category-icon";
 import Link from "next/link";
 import { Rating } from "@/ui/rating";
 import { useSettings } from "@/hooks/use-settings";
+import { MealTypeIcon } from "../icons/meal-type-icon";
 
 export default function MensaCategoryCard({
   category,
-  // allergies,
 }: {
   category: Category;
-  // allergies: boolean;
 }) {
   const meal = category.meals[0];
 
@@ -33,12 +32,15 @@ export default function MensaCategoryCard({
       <div className="bg-card hover:bg-muted h-full cursor-pointer rounded-md px-4 py-2 shadow-sm">
         <div
           className="flex flex-col justify-between md:flex-row"
-          style={{ color: categoryColorMap[category.category] ?? "#3f3f3f" }}
+          style={{
+            color: mealCategoryColorMap[category.category] ?? "#3f3f3f",
+          }}
         >
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">{category.category}</h3>
             <CategoryIcon category={category.category} size={20} />
           </div>
+
           <Rating
             value={meal.rating ?? 0}
             maxRating={5}
@@ -47,7 +49,14 @@ export default function MensaCategoryCard({
           />
         </div>
 
-        <h4 className="mt-2 text-lg font-semibold">{meal.name}</h4>
+        <div className="mt-2 flex items-center justify-between md:justify-start md:gap-2">
+          <h4 className="text-lg font-semibold">{meal.name}</h4>
+          <div className="flex items-center gap-2">
+            {meal.types.map((type) => (
+              <MealTypeIcon key={type} mealType={type} />
+            ))}
+          </div>
+        </div>
         <p className="text-normal font-semibold">{priceString.trim()}</p>
 
         <div className="mt-1 flex h-3 items-center gap-2">

@@ -1,10 +1,7 @@
-import {
-  Allergy,
-  Meal,
-  MealCategory,
-  MealNutrition,
-  MealType,
-} from "@/types/meal";
+import { Allergy } from "@/types/allergy";
+import { MealCategory } from "@/types/category";
+import { Meal, MealNutrition } from "@/types/meal";
+import { MealType } from "@/types/meal-types";
 
 export function parseMealDiv(div: Element, category: MealCategory): Meal {
   if (!div.classList.contains("splMeal")) {
