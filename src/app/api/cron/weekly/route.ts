@@ -5,6 +5,7 @@ import { env } from "@/env.mjs";
 import { saveMealsToDb } from "@/lib/db-integration/save-to-db";
 import { parseMensaHTML } from "@/lib/scraper/studienwerk-parser";
 import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
+import { getStartOfWeek } from "@/lib/utils";
 
 /**
  * Runs every Monday at 5:00 AM (CRON: 0 5 * * 1)
@@ -21,9 +22,9 @@ export async function GET(request: NextRequest) {
   }
 
   const today = new Date();
-  const nextMonday = new Date(today);
-  nextMonday.setDate(today.getDate() + ((1 + 7 - today.getDay()) % 7));
-  nextMonday.setHours(8, 0, 0, 0);
+  today.setDate(today.getDate() + 7);
+
+  const nextMonday = getStartOfWeek(today);
 
   // DEVELOPER ONLY: INSERT THIS WEEK AS WELL
   // nextMonday.setDate(nextMonday.getDate() - 7);
