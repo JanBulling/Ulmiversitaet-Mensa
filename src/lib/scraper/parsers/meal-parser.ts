@@ -237,7 +237,7 @@ function parseNutritionDiv(nutritionDiv?: Element | null): MealNutrition {
       .trim();
 
     return nutrition;
-  } catch (error) {
+  } catch {
     console.error("Error parsing nutrition information", {
       div: nutritionDiv,
     });

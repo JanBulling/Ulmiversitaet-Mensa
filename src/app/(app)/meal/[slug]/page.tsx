@@ -1,10 +1,9 @@
 import SiteLayout from "@/components/general/site-layout";
 import { CategoryIcon } from "@/components/icons/category-icon";
+import Ratings from "@/components/meal/ratings";
 import { db } from "@/lib/db/db";
 import { mealsTable } from "@/lib/db/schema";
 import { mealCategoryColorMap } from "@/types/category";
-import { Rating } from "@/ui/rating";
-import { Separator } from "@/ui/separator";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
@@ -57,36 +56,6 @@ export default async function MealPage({ params }: MealPageProps) {
       </div>
 
       <div className="mt-8">
-        <h3 className="text-xl font-bold">
-          Bewerung{" "}
-          <span className="text-sm font-normal">
-            ({meal.num_ratings ?? 0} Bewetungen)
-          </span>
-        </h3>
-        <div className="max-w-fit">
-          <div className="flex justify-end gap-2">
-            <h4 className="font-semibold">Geschmack:</h4>
-            <Rating value={meal.rating_taste ?? 0} />
-          </div>
-          <div className="flex justify-end gap-2">
-            <h4 className="font-semibold">Optik:</h4>
-            <Rating value={meal.rating_look ?? 0} />
-          </div>
-          <div className="flex justify-end gap-2">
-            <h4 className="font-semibold">Preis:</h4>
-            <Rating value={meal.rating_price ?? 0} />
-          </div>
-
-          <Separator orientation="horizontal" className="my-2" />
-
-          <div className="text-primary flex justify-end gap-2">
-            <h4 className="font-semibold">Gesamt:</h4>
-            <Rating value={meal.rating_total ?? 0} />
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8">
         <h3 className="text-xl font-bold">Nährwerte</h3>
         <div className="text-muted-foreground flex items-center gap-4">
           <p>Kalorien:</p>
@@ -124,6 +93,15 @@ export default async function MealPage({ params }: MealPageProps) {
           ))}
         </div>
       </div>
+
+      <Ratings
+        mealId={meal.id}
+        totalRating={meal.rating_total}
+        numberRatings={meal.num_ratings}
+        tasteRating={meal.rating_taste}
+        lookRating={meal.rating_look}
+        priceRating={meal.rating_price}
+      />
     </SiteLayout>
   );
 }

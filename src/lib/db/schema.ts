@@ -5,7 +5,6 @@ import {
   date,
   index,
   integer,
-  numeric,
   pgEnum,
   pgTableCreator,
   real,
@@ -87,7 +86,10 @@ export const ratingsTable = pgTable(
   {
     id: serial("id").primaryKey(),
     text: text("text"),
-    rating: numeric("rating").notNull(),
+    rating_taste: real("rating_taste").notNull(),
+    rating_price: real("rating_price").notNull(),
+    rating_look: real("rating_look").notNull(),
+    rating_total: real("rating_total").notNull(),
 
     meal_id: uuid("meal_id")
       .references(() => mealsTable.id)

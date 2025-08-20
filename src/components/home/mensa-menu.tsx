@@ -39,7 +39,8 @@ export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
 
     try {
       const response = await fetch(`/api/v1?date=${dateString}`, {
-        cache: "force-cache",
+        cache: "default",
+        next: { revalidate: 3600 },
       });
       const mensaMenuResponse = await response.json();
 

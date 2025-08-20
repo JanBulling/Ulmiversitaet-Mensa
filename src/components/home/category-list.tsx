@@ -57,7 +57,6 @@ export default function MensaCategoryList({
                   <Rating
                     value={meal.rating ?? 0}
                     maxRating={5}
-                    showNumber
                     numberRatings={meal.numberRatings ?? 0}
                   />
                 </div>

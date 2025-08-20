@@ -25,3 +25,11 @@ export function getStartOfWeek(date: Date): Date {
   startOfWeek.setHours(8, 0, 0, 0);
   return startOfWeek;
 }
+
+export function getTotalRating(
+  taste: number,
+  look: number,
+  price: number,
+): number {
+  return (3 * taste + 2 * look + price) / 6;
+}

@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 import { cn } from "@/lib/utils";
-type RatingContextValue = {
+type RatingInputContextValue = {
   value: number;
   readOnly: boolean;
   hoverValue: number | null;
@@ -26,9 +26,9 @@ type RatingContextValue = {
   setHoverValue: (value: number | null) => void;
   setFocusedStar: (value: number | null) => void;
 };
-const RatingContext = createContext<RatingContextValue | null>(null);
+const RatingInputContext = createContext<RatingInputContextValue | null>(null);
 const useRating = () => {
-  const context = useContext(RatingContext);
+  const context = useContext(RatingInputContext);
   if (!context) {
     throw new Error("useRating must be used within a Rating component");
   }
@@ -106,7 +106,7 @@ export const RatingButton = ({
     </button>
   );
 };
-export type RatingProps = {
+export type RatingInputProps = {
   defaultValue?: number;
   value?: number;
   onChange?: (
@@ -117,8 +117,8 @@ export type RatingProps = {
   readOnly?: boolean;
   className?: string;
   children?: ReactNode;
-};
-export const Rating = ({
+} & React.HTMLProps<HTMLDivElement>;
+export const RatingInput = ({
   value: controlledValue,
   onValueChange: controlledOnValueChange,
   defaultValue = 0,
@@ -127,7 +127,7 @@ export const Rating = ({
   className,
   children,
   ...props
-}: RatingProps) => {
+}: RatingInputProps) => {
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const [focusedStar, setFocusedStar] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -185,7 +185,7 @@ export const Rating = ({
       buttons[focusedStar - 1]?.focus();
     }
   }, [focusedStar]);
-  const contextValue: RatingContextValue = {
+  const contextValue: RatingInputContextValue = {
     value: value ?? 0,
     readOnly,
     hoverValue,
@@ -196,7 +196,7 @@ export const Rating = ({
     setFocusedStar,
   };
   return (
-    <RatingContext.Provider value={contextValue}>
+    <RatingInputContext.Provider value={contextValue}>
       <div
         aria-label="Rating"
         className={cn("inline-flex items-center gap-0.5", className)}
@@ -214,6 +214,6 @@ export const Rating = ({
           });
         })}
       </div>
-    </RatingContext.Provider>
+    </RatingInputContext.Provider>
   );
 };
