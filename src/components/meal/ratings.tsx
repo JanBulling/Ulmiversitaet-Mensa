@@ -41,7 +41,7 @@ export default async function Ratings({
   });
 
   return (
-    <div className="lg:ox-8 w-full px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:py-32">
+    <div className="w-full py-8 md:grid md:grid-cols-12 md:gap-x-8">
       <div className="lg:col-span-4">
         <h2 className="text-2xl font-bold tracking-tight">Bewertungen</h2>
         <Rating
@@ -83,6 +83,13 @@ export default async function Ratings({
         <h2 className="text-2xl font-bold tracking-tight">Kommentare</h2>
 
         <div className="divide-muted-foreground -my-2 divide-y">
+          {comments.length === 0 && (
+            <div className="my-8">
+              <p className="text-sm italic">
+                Noch keine Kommentare zu diesem Gericht
+              </p>
+            </div>
+          )}
           {comments.map((comment) => (
             <div key={comment.id} className="py-8">
               <div className="flex items-center justify-between">

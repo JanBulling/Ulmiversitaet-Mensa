@@ -1,3 +1,4 @@
+import { Preference } from "@/hooks/use-settings";
 import {
   Vegan,
   Ham,
@@ -52,3 +53,30 @@ export const mealTypeColorMap: Partial<Record<MealType, string>> = {
   FISCH: "#0284c7",
   TINTENFISCH: "#3730a3",
 };
+
+const preferenceMealTypeMap: Partial<Record<Preference, MealType[]>> = {
+  VEGAN: ["VEGAN"],
+  VEGETARIAN: ["VEGAN", "VEGETARIAN"],
+  PESCETARIAN: ["VEGAN", "VEGETARIAN", "FISCH", "TINTENFISCH"],
+  "NO-PORK": [
+    "VEGAN",
+    "VEGETARIAN",
+    "FISCH",
+    "TINTENFISCH",
+    "GEFLÜGEL",
+    "LAMM",
+    "RIND",
+  ],
+};
+
+export function checkIfMealTyeIsAllowed(
+  mealTypes: MealType[],
+  preference: Preference,
+): boolean {
+  if (preference === "NONE") return true;
+
+  const allowedTypes = preferenceMealTypeMap[preference];
+  if (!allowedTypes) return false;
+
+  return mealTypes.every((meal) => allowedTypes.includes(meal));
+}

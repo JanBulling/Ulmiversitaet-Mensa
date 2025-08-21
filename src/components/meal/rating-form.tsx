@@ -142,14 +142,14 @@ export default function RatingsForm({ mealId, className, ...props }: Props) {
 
       <div>
         <Label className="text-sm font-semibold" htmlFor="rating_taste">
-          Kommentar
+          Kommentar (optional)
         </Label>
         <Textarea
           {...register("comment", {
             onChange: (e) => setCommentLength(e.target.value.length),
           })}
           className="h-32"
-          placeholder="Hinterlasse einen Kommentar"
+          placeholder="Hinterlasse einen optionalen Kommentar"
         />
         <p className="text-muted-foreground text-xs">{commentLength}/1000</p>
       </div>

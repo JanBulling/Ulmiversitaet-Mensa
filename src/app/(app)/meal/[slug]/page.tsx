@@ -1,9 +1,15 @@
 import SiteLayout from "@/components/general/site-layout";
 import { CategoryIcon } from "@/components/icons/category-icon";
+import { MealTypeIcon } from "@/components/icons/meal-type-icon";
+import { Allergies } from "@/components/meal/allergies";
+import { NutritionalValues } from "@/components/meal/nutritional-values";
+import Price from "@/components/meal/price";
 import Ratings from "@/components/meal/ratings";
 import { db } from "@/lib/db/db";
 import { mealsTable } from "@/lib/db/schema";
+import { capitalize } from "@/lib/utils";
 import { mealCategoryColorMap } from "@/types/category";
+import { mealTypeColorMap } from "@/types/meal-types";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
@@ -26,7 +32,7 @@ export default async function MealPage({ params }: MealPageProps) {
 
   return (
     <SiteLayout className="my-4">
-      <h1 className="text-2xl font-bold">{meal.name}</h1>
+      <h1 className="text-4xl font-bold">{meal.name}</h1>
       <div className="flex items-center gap-2">
         <CategoryIcon category={meal.category} />
         <p
@@ -37,62 +43,40 @@ export default async function MealPage({ params }: MealPageProps) {
         </p>
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-xl font-bold">
-          Preis <span className="text-sm font-normal">{meal.price_note}</span>
-        </h3>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Studenten</p>
-          <p>{meal.price_student}€</p>
-        </div>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Mitarbeiter</p>
-          <p>{meal.price_employee}€</p>
-        </div>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Gäste</p>
-          <p>{meal.price_others}€</p>
-        </div>
+      <div className="my-8 space-y-2">
+        {meal.types.map((type) => (
+          <div key={type} className="flex items-center gap-2">
+            <MealTypeIcon mealType={type} />
+            <p
+              className="font-semibold"
+              style={{ color: mealTypeColorMap[type] }}
+            >
+              {capitalize(type)}
+            </p>
+          </div>
+        ))}
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-xl font-bold">Nährwerte</h3>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Kalorien:</p>
-          <p>{meal.nutrition_calories}kcal</p>
-        </div>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Fett:</p>
-          <p>
-            {meal.nutrition_fat}g (davon gesättigt:{" "}
-            {meal.nutrition_saturated_fat}g)
-          </p>
-        </div>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Kohlenhydrate:</p>
-          <p>
-            {meal.nutrition_carbohydrates}g (davon Zucker:{" "}
-            {meal.nutrition_sugar}g)
-          </p>
-        </div>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Proteine:</p>
-          <p>{meal.nutrition_protein}g</p>
-        </div>
-        <div className="text-muted-foreground flex items-center gap-4">
-          <p>Salz:</p>
-          <p>{meal.nutrition_salt}g</p>
-        </div>
+      <div className="md:grid md:grid-cols-2">
+        <Price
+          note={meal.price_note}
+          student={meal.price_student}
+          employee={meal.price_employee}
+          other={meal.price_others}
+        />
+
+        <NutritionalValues
+          calories={meal.nutrition_calories}
+          protein={meal.nutrition_protein}
+          fat={meal.nutrition_fat}
+          saturatedFat={meal.nutrition_saturated_fat}
+          carbohydrates={meal.nutrition_carbohydrates}
+          sugar={meal.nutrition_sugar}
+          salt={meal.nutrition_salt}
+        />
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-xl font-bold">Allergien</h3>
-        <div className="flex flex-wrap gap-4">
-          {meal.allergies.map((a) => (
-            <p key={a}>{a}</p>
-          ))}
-        </div>
-      </div>
+      <Allergies allergies={meal.allergies} />
 
       <Ratings
         mealId={meal.id}

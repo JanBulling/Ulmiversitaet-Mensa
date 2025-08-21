@@ -1,3 +1,5 @@
+import { Preference } from "@/hooks/use-settings";
+import { Meal } from "@/types/meal";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -32,4 +34,10 @@ export function getTotalRating(
   price: number,
 ): number {
   return (3 * taste + 2 * look + price) / 6;
+}
+
+export function capitalize(str: string): string {
+  const firstLetter = str[0];
+
+  return firstLetter.toLocaleUpperCase() + str.substring(1).toLocaleLowerCase();
 }

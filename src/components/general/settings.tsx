@@ -18,8 +18,14 @@ import { Switch } from "@/ui/input/switch";
 import { Label } from "@/ui/input/label";
 
 export function Settings() {
-  const { priceType, setPriceType, hideBadMeals, setHideBadMeals } =
-    useSettings();
+  const {
+    priceType,
+    setPriceType,
+    hideBadMeals,
+    setHideBadMeals,
+    preferences,
+    setPreferences,
+  } = useSettings();
 
   const { setTheme, resolvedTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
@@ -65,6 +71,22 @@ export function Settings() {
           Diese Einstellung wird benötigt, um die korrekten Mensa-Preise
           anzuzeigen
         </p>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold">Ich ernähre mich...</h3>
+        <Select value={preferences} onValueChange={setPreferences}>
+          <SelectTrigger className="mt-2">
+            <SelectValue defaultValue={preferences} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="NONE">Ich esse alles</SelectItem>
+            <SelectItem value="VEGAN">Vegan</SelectItem>
+            <SelectItem value="VEGETARIAN">Vegetarisch</SelectItem>
+            <SelectItem value="PESCETARIAN">Pescetarisch</SelectItem>
+            <SelectItem value="NO-PORK">Halal</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div>
