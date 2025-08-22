@@ -1,5 +1,5 @@
 import SiteLayout from "@/components/general/site-layout";
-import { Skeleton } from "@/ui/Skeleton";
+import { Skeleton } from "@/ui/skeleton";
 
 export default function MealLoadingPage() {
   return (

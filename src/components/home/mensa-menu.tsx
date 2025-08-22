@@ -5,7 +5,7 @@ import * as React from "react";
 import { Category } from "@/types/category";
 import DateSelector from "./date-selector";
 import MensaCategoryCard from "./category-card";
-import { Skeleton } from "@/ui/Skeleton";
+import { Skeleton } from "@/ui/skeleton";
 import { MealCategory } from "@/types/category";
 import MensaCategoryList from "./category-list";
 import { Separator } from "@/ui/separator";

@@ -1,5 +1,5 @@
 import DateSelector from "@/components/home/date-selector";
-import { Skeleton } from "@/ui/Skeleton";
+import { Skeleton } from "@/ui/skeleton";
 
 export default function HomeLoading() {
   const date = new Date();
