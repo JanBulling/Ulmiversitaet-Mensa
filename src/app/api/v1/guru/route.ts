@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
       },
       {
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin":
+            "https://ulmiversität.de, https://ulmiversitaet.de, http://localhost:3000",
         },
       },
     );
