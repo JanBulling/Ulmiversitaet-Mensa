@@ -11,6 +11,7 @@ const server = z.object({
   NEON_DATABASE_URL: z.string(),
 
   CRON_SECRET: z.string(),
+  GEMINI_API_KEY: z.string(),
 });
 
 /**
@@ -31,6 +32,7 @@ const processEnv = {
   NEON_DATABASE_URL: process.env.NEON_DATABASE_URL,
 
   CRON_SECRET: process.env.CRON_SECRET,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 };
 
 const merged = server.merge(client);
