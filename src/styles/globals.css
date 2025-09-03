@@ -163,8 +163,3 @@
     display: none;
   }
 }
-
-header.scrolled {
-  @apply bg-card/25;
-  @apply saturate-200 backdrop-blur-sm;
-}

@@ -46,7 +46,10 @@ export default function Logo({
   textHiddenOnSmall,
 }: LogoProps) {
   return (
-    <Link href="/" className="relative flex items-center gap-2">
+    <Link
+      href="https://ulmiversitaet.de"
+      className="relative flex items-center gap-2"
+    >
       <img
         src="/logo.png"
         alt="Ulmiversität Logo"

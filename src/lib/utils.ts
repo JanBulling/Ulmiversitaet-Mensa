@@ -1,5 +1,3 @@
-import { Preference } from "@/hooks/use-settings";
-import { Meal } from "@/types/meal";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
