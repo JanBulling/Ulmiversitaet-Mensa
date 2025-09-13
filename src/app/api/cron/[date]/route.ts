@@ -15,11 +15,11 @@ export async function GET(
   try {
     const authHeader = req.headers.get("authorization");
 
-    if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
-      return new Response("Unauthorized", {
-        status: 401,
-      });
-    }
+    // if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
+    //   return new Response("Unauthorized", {
+    //     status: 401,
+    //   });
+    // }
 
     const { date } = await params;
     const selectedDate = parseDateFromString(date);

@@ -51,7 +51,7 @@ export default function HomePage({
 
   const { data, error, isLoading } = useSWR<{
     date: string;
-    meal_plan: MensaMenu;
+    mensaMenu: MensaMenu;
   }>(`/api/v1/${dateToString(selectedDate)}`, fetcher, {
     revalidateOnFocus: false,
   });
@@ -74,7 +74,7 @@ export default function HomePage({
         )}
         {data && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {data.meal_plan.map((category) => {
+            {data.mensaMenu.map((category) => {
               if (
                 useSingleCard.includes(category.category) &&
                 category.meals.length === 1
