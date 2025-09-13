@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 import {
@@ -30,12 +30,15 @@ const useSingleCard: MealCategory[] = [
   "TOPF UND PFANNE",
 ];
 
-export default function HomePage() {
+export default function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const initialDate =
-    parseDateFromString(searchParams.get("date")) ||
+    parseDateFromString(React.use(searchParams).date) ||
     adjustToNextWeekday(new Date());
 
   const [selectedDate, setSelectedDate] = React.useState<Date>(initialDate);

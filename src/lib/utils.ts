@@ -40,9 +40,16 @@ export function capitalize(str: string): string {
   return firstLetter.toLocaleUpperCase() + str.substring(1).toLocaleLowerCase();
 }
 
-export function parseDateFromString(dateStr: string | null): Date | null {
+export function parseDateFromString(
+  dateStr: string | string[] | null | undefined,
+): Date | null {
   if (!dateStr) return null;
-  const parsed = new Date(dateStr);
+  let parsed: Date;
+  if (typeof dateStr === "string") {
+    parsed = new Date(dateStr);
+  } else {
+    parsed = new Date(dateStr[0]);
+  }
   return isNaN(parsed.getTime()) ? null : parsed;
 }
 
