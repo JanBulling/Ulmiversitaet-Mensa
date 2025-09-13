@@ -13,6 +13,9 @@ import { mealTypeColorMap } from "@/types/meal-types";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
+export const revalidate = 86400;
+export const dynamic = "force-static";
+
 interface MealPageProps {
   params: Promise<{ slug: string }>;
 }

@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
+
 import { getMenuForDate } from "@/lib/db-integration/get-for-date";
+import { dateToString, parseDateFromString } from "@/lib/utils";
 
 export const revalidate = 86400;
 export const dynamic = "force-static";
@@ -8,21 +10,23 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ date: string }> },
 ) {
-  const { date } = await params;
+  try {
+    const { date } = await params;
+    const selectedDate = parseDateFromString(date);
+    if (!selectedDate) {
+      console.error("[V1/[date] - GET]", `${date} is not a valid date`);
+      return new Response("Invalid date", { status: 500 });
+    }
 
-  const selectedDate = new Date(date);
+    const dateString = dateToString(selectedDate);
+    const categories = await getMenuForDate(selectedDate);
 
-  if (isNaN(selectedDate.getTime())) {
-    console.error("[V1 - GET]", `${date} is not a valid date`);
-    return Response.json({ status: 400, message: "Invalid date given" });
+    return Response.json({
+      date: dateString,
+      mensaMenu: categories,
+    });
+  } catch (err) {
+    console.error("[V1/[date] - GET]", "Unexpected server error", err);
+    return new Response("Unexpected server error", { status: 500 });
   }
-
-  console.info("[V1 - GET]", "Fetching data for", date);
-
-  const categories = await getMenuForDate(selectedDate);
-
-  return Response.json({
-    date: selectedDate.toISOString().split("T")[0],
-    meal_plan: categories,
-  });
 }
