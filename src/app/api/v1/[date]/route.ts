@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getMenuForDate } from "@/lib/db-integration/get-for-date";
 
 export const revalidate = 86400;
+export const dynamic = "force-static";
 
 export async function GET(
   _req: NextRequest,
