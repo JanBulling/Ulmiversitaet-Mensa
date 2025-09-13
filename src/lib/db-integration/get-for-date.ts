@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/db";
 import { mealsTable, mensaPlanTable } from "../db/schema";
-import { Category, mealCategories } from "@/types/category";
+import { mealCategories, MensaMenu } from "@/types/category";
 
-export async function getMenuForDate(date: Date): Promise<Category[]> {
+export async function getMenuForDate(date: Date): Promise<MensaMenu> {
   date.setHours(8, 0, 0, 0);
 
   const mealsResponse = await db
@@ -12,12 +12,12 @@ export async function getMenuForDate(date: Date): Promise<Category[]> {
     .innerJoin(mensaPlanTable, eq(mensaPlanTable.meal_id, mealsTable.id))
     .where(eq(mensaPlanTable.date, date));
 
-  const categories: Category[] = [];
+  const menu: MensaMenu = [];
 
   mealsResponse.forEach((response) => {
     const meal = response.meals;
 
-    const category = categories.find((cat) => cat.category === meal.category);
+    const category = menu.find((cat) => cat.category === meal.category);
 
     if (category) {
       category.meals.push({
@@ -43,7 +43,7 @@ export async function getMenuForDate(date: Date): Promise<Category[]> {
         numberRatings: meal.num_ratings,
       });
     } else {
-      categories.push({
+      menu.push({
         category: meal.category,
         meals: [
           {
@@ -73,11 +73,11 @@ export async function getMenuForDate(date: Date): Promise<Category[]> {
     }
   });
 
-  categories.sort((a, b) => {
+  menu.sort((a, b) => {
     return (
       mealCategories.indexOf(a.category) - mealCategories.indexOf(b.category)
     );
   });
 
-  return categories;
+  return menu;
 }

@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { Meal } from "./meal";
 
+export type MensaMenu = Category[];
+
 export type Category = {
   category: MealCategory;
   meals: Omit<Meal, "category">[];

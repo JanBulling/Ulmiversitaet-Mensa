@@ -39,3 +39,23 @@ export function capitalize(str: string): string {
 
   return firstLetter.toLocaleUpperCase() + str.substring(1).toLocaleLowerCase();
 }
+
+export function parseDateFromString(dateStr: string | null): Date | null {
+  if (!dateStr) return null;
+  const parsed = new Date(dateStr);
+  return isNaN(parsed.getTime()) ? null : parsed;
+}
+
+export function dateToString(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
+
+export function adjustToNextWeekday(date: Date): Date {
+  const day = date.getDay(); // 0=Sunday, 6=Saturday
+  if (day === 6) {
+    date.setDate(date.getDate() + 2);
+  } else if (day === 0) {
+    date.setDate(date.getDate() + 1);
+  }
+  return date;
+}
