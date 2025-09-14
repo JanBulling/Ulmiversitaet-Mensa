@@ -7,7 +7,7 @@ export default function SiteLayout({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("mx-auto max-w-screen-xl px-4 md:px-12", className)}
+      className={cn("mx-auto max-w-screen-xl px-3 md:px-8", className)}
       {...props}
     >
       {children}

@@ -18,8 +18,6 @@ const corsHeaders = [
 export async function GET(req: NextRequest) {
   try {
     const origin = req.headers.get("origin");
-    console.info("[GURU - GET]", "Request for guru from origin", origin);
-
     if (!origin || !corsHeaders.includes(origin))
       return new Response("Unauthorized", { status: 400 });
 

@@ -7,7 +7,7 @@ interface AllergiesDisplayProps {
 
 export default function AllergiesDisplay({ allergies }: AllergiesDisplayProps) {
   return (
-    <div className="bg-card rounded border px-4 py-2 shadow">
+    <div className="bg-card rounded border px-2 py-2 shadow md:px-4">
       <h2 className="font-semibold">Allergien</h2>
 
       <div className="mt-2 space-y-1">

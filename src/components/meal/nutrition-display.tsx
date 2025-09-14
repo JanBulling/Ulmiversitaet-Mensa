@@ -20,7 +20,7 @@ export default function NutritionDisplay({
   salt,
 }: NutritionDisplayProps) {
   return (
-    <div className="bg-card rounded border px-4 py-2 shadow">
+    <div className="bg-card rounded border px-2 py-2 shadow md:px-4">
       <h2 className="font-semibold">
         Nährwerte{" "}
         <span className="text-muted-foreground text-sm font-normal">

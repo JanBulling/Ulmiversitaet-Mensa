@@ -83,7 +83,7 @@ export default async function MealPage({
       </div>
       <h1 className="text-2xl font-bold md:text-4xl">{meal.name}</h1>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-4">
         <div>
           <div className="my-2 flex flex-wrap gap-2">
             {meal.types.map((type) => (
@@ -116,7 +116,7 @@ export default async function MealPage({
             priceRating={meal.rating_price ?? 0}
           />
 
-          <div className="my-4 grid grid-cols-2 items-start gap-2">
+          <div className="my-4 grid grid-cols-1 items-start gap-2 sm:grid-cols-2">
             <NutritionDisplay
               calories={meal.nutrition_calories ?? "-"}
               protein={meal.nutrition_protein ?? "-"}
@@ -129,20 +129,20 @@ export default async function MealPage({
             <AllergiesDisplay allergies={meal.allergies} />
           </div>
         </div>
-        <div className="mt-4">
+        <div className="hidden md:mt-4 md:block">
           <div className="bg-muted text-muted-foreground flex aspect-video items-center justify-center rounded border p-4 text-center">
             Bilder können aktuell noch nicht hochgeladen werden 🥹
           </div>
         </div>
       </div>
 
-      <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mt-4 mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <h2 className="text-xl font-semibold">Hinterlasse eine Bewertung</h2>
           {isFromPast ? (
             <RatingForm className="mt-1" slug={meal.slug} mealId={meal.id} />
           ) : (
-            <div className="bg-card rounded border px-4 py-8 shadow">
+            <div className="bg-card rounded border px-2 py-8 shadow md:px-4">
               <p className="text-muted-foreground text-center text-sm">
                 Zukünftige Gerichte können noch nicht bewertet werden!
               </p>
@@ -152,7 +152,7 @@ export default async function MealPage({
 
         <div>
           <h2 className="text-xl font-semibold">Kommentare</h2>
-          <div className="bg-card mt-1 rounded border px-4 shadow">
+          <div className="bg-card mt-1 rounded border px-2 shadow md:px-4">
             {comments.length === 0 && (
               <p className="text-muted-foreground my-4 text-center text-sm">
                 Noch keine Kommentare abgegeben!
