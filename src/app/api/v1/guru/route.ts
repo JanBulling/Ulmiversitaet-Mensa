@@ -1,7 +1,5 @@
 import { NextRequest } from "next/server";
 
-import { env } from "@/env.mjs";
-
 import { geminiResponse } from "@/lib/gemini";
 import { GURU_SYSTEM_PROMPT, menuToGuruFormat } from "@/lib/guru";
 import { getMenuForDate } from "@/lib/db-integration/get-for-date";
@@ -19,10 +17,9 @@ const corsHeaders = [
 
 export async function GET(req: NextRequest) {
   try {
-    const authHeader = req.headers.get("authorization");
-
-    if (authHeader !== `Bearer ${env.GURU_SECRET}`)
-      return new Response("Unauthorized", { status: 401 });
+    const origin = req.headers.get("origin");
+    if (!origin || !corsHeaders.includes(origin))
+      return new Response("Unauthorized", { status: 400 });
 
     const menuToday = await getMenuForDate(dateToString(new Date()));
     const guruContent = menuToGuruFormat(menuToday);
@@ -35,7 +32,7 @@ export async function GET(req: NextRequest) {
       { message: guruAnswer },
       {
         headers: {
-          "Access-Control-Allow-Origin": corsHeaders.join(", "),
+          "Access-Control-Allow-Origin": origin,
           "Content-Type": "application/json",
         },
       },
