@@ -1,12 +1,12 @@
 import { NextRequest } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import { env } from "@/env.mjs";
 
 import { saveMealsToDb } from "@/lib/db-integration/save-to-db";
 import { parseMensaHTML } from "@/lib/scraper/studienwerk-parser";
 import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
-import { dateToString, getStartOfWeek } from "@/lib/utils";
+import { getStartOfWeek } from "@/lib/utils";
 
 /**
  * Runs every Monday at 5:00 AM (CRON: 0 5 * * 1)
@@ -28,9 +28,6 @@ export async function GET(request: NextRequest) {
     today.setDate(today.getDate() + 7);
     const nextMonday = getStartOfWeek(today);
 
-    // DEVELOPER ONLY: INSERT THIS WEEK AS WELL
-    // nextMonday.setDate(nextMonday.getDate() - 7);
-
     try {
       for (let i = 0; i < 5; i++) {
         const mealDate = new Date(nextMonday);
@@ -39,10 +36,12 @@ export async function GET(request: NextRequest) {
         const mealPlan = parseMensaHTML(mensaHTML);
 
         // revalidate cache for the selected day
-        revalidatePath(`/api/v1/${dateToString(mealDate)}`);
+        // revalidatePath(`/api/v1/${dateToString(mealDate)}`);
+        // revalidateTag(`mensa-menu-${dateToString(mealDate)}`);
 
         await saveMealsToDb(mealPlan, mealDate);
       }
+      revalidateTag("mensa-menu");
 
       return new Response("Success", { status: 200 });
     } catch (err) {

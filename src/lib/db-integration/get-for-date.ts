@@ -1,16 +1,30 @@
+import { unstable_cache as cache } from "next/cache";
 import { eq } from "drizzle-orm";
+
 import { db } from "../db/db";
 import { mealsTable, mensaPlanTable } from "../db/schema";
 import { mealCategories, MensaMenu } from "@/types/category";
 
-export async function getMenuForDate(date: Date): Promise<MensaMenu> {
-  date.setHours(8, 0, 0, 0);
+export const getMenuForDate = cache(
+  async (date: string) => getMenuForDateFromDb(date),
+  undefined,
+  {
+    tags: ["mensa-menu"],
+    revalidate: 86400,
+  },
+);
+
+async function getMenuForDateFromDb(date: string): Promise<MensaMenu> {
+  const mealDate = new Date(date);
+  mealDate.setHours(8, 0, 0, 0);
+
+  console.info("[GET-MENU-FOR-DATE]", date, `fetching menu from database`);
 
   const mealsResponse = await db
     .select()
     .from(mealsTable)
     .innerJoin(mensaPlanTable, eq(mensaPlanTable.meal_id, mealsTable.id))
-    .where(eq(mensaPlanTable.date, date));
+    .where(eq(mensaPlanTable.date, mealDate));
 
   const menu: MensaMenu = [];
 

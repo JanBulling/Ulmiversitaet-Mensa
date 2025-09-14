@@ -3,8 +3,8 @@ import { NextRequest } from "next/server";
 import { getMenuForDate } from "@/lib/db-integration/get-for-date";
 import { dateToString, parseDateFromString } from "@/lib/utils";
 
-export const revalidate = 86400;
-export const dynamic = "force-static";
+// export const revalidate = 86400;
+// export const dynamic = "force-static";
 
 export async function GET(
   _req: NextRequest,
@@ -18,8 +18,14 @@ export async function GET(
       return new Response("Invalid date", { status: 500 });
     }
 
+    console.info(
+      "[V1-[date] - GET]",
+      dateToString(selectedDate),
+      "api endpoint called",
+    );
+
     const dateString = dateToString(selectedDate);
-    const categories = await getMenuForDate(selectedDate);
+    const categories = await getMenuForDate(dateString);
 
     return Response.json({
       date: dateString,
