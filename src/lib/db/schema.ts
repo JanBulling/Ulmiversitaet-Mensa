@@ -95,10 +95,10 @@ export const ratingsTable = pgTable(
       .references(() => mealsTable.id)
       .notNull(),
 
-    created_at: timestamp("created_at", { withTimezone: true })
+    created_at: timestamp("created_at", { withTimezone: false })
       .defaultNow()
       .notNull(),
-    updated_at: timestamp("updated_at", { withTimezone: true })
+    updated_at: timestamp("updated_at", { withTimezone: false })
       .defaultNow()
       .notNull()
       .$onUpdate(() => new Date()),

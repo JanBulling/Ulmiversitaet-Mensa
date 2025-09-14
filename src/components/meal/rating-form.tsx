@@ -10,9 +10,12 @@ import { RatingButton, RatingInput } from "@/ui/input/rating-input";
 import { Button } from "@/ui/button";
 import { Textarea } from "@/ui/input/textarea";
 import { useRouter } from "next/navigation";
+import { useStorage } from "@/hooks/use-storage";
 
-interface Props extends React.HTMLAttributes<HTMLFormElement> {
+interface Props {
   mealId: string;
+  slug: string;
+  className?: string;
 }
 
 const schema = z.object({
@@ -24,11 +27,11 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function RatingsForm({ mealId, className, ...props }: Props) {
+export default function RatingForm({ mealId, slug, className }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [commentLength, setCommentLength] = React.useState<number>(0);
-  const [alreadyRated, setAlreadyRated] = React.useState<boolean>(false);
+  const [alreadyRated, setAlreadyRated] = useStorage<string[]>("ratings", []);
 
   const {
     register,
@@ -55,113 +58,101 @@ export default function RatingsForm({ mealId, className, ...props }: Props) {
       return;
     }
     router.refresh();
-    setAlreadyRated(true);
+    setAlreadyRated([...alreadyRated, slug]);
   }
 
-  if (alreadyRated) {
-    return null;
+  if (alreadyRated.includes(slug)) {
+    return (
+      <div className={cn("bg-card rounded border px-4 py-8 shadow", className)}>
+        <p className="text-muted-foreground text-center text-sm">
+          Du hast dieses Gericht bereits bewertet
+        </p>
+      </div>
+    );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className={cn("my-4 max-w-3xl space-y-2", className)}
-      {...props}
-    >
-      <div className="">
-        <Label className="text-sm font-semibold" htmlFor="rating_taste">
-          Geschmack:
-        </Label>
-        <RatingInput
-          id="rating_taste"
-          onValueChange={(val) => setValue("rating_taste", val)}
-          {...register("rating_taste")}
+    <div className={cn("bg-card rounded border px-4 py-4 shadow", className)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="pace-y-2">
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Label className="text-sm font-semibold">Geschmack</Label>
+            <RatingInput
+              id="rating_taste"
+              onValueChange={(val) => setValue("rating_taste", val)}
+              {...register("rating_taste")}
+            >
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <RatingButton
+                  key={idx}
+                  size={16}
+                  className={cn(errors.rating_taste && "text-destructive")}
+                />
+              ))}
+            </RatingInput>
+          </div>
+
+          <div>
+            <Label className="text-sm font-semibold">Optik</Label>
+            <RatingInput
+              id="rating_look"
+              onValueChange={(val) => setValue("rating_look", val)}
+              {...register("rating_look")}
+            >
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <RatingButton
+                  key={idx}
+                  size={16}
+                  className={cn(errors.rating_taste && "text-destructive")}
+                />
+              ))}
+            </RatingInput>
+          </div>
+
+          <div>
+            <Label className="text-sm font-semibold">Preis</Label>
+            <RatingInput
+              id="rating_price"
+              onValueChange={(val) => setValue("rating_price", val)}
+              {...register("rating_price")}
+            >
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <RatingButton
+                  key={idx}
+                  size={16}
+                  className={cn(errors.rating_taste && "text-destructive")}
+                />
+              ))}
+            </RatingInput>
+          </div>
+        </div>
+
+        <div className="mt-2">
+          <Label className="text-sm font-semibold" htmlFor="rating_taste">
+            Kommentar{" "}
+            <span className="text-muted-foreground font-normal">
+              (optional)
+            </span>
+          </Label>
+          <Textarea
+            {...register("comment", {
+              onChange: (e) => setCommentLength(e.target.value.length),
+            })}
+            className="h-32"
+            placeholder="Hinterlasse einen Kommentar"
+          />
+          <p className="text-muted-foreground text-xs">{commentLength}/1000</p>
+        </div>
+
+        <Button
+          type="submit"
+          loading={isLoading}
+          className={cn("bg-card w-full cursor-pointer")}
+          variant="outline"
         >
-          {Array.from({ length: 5 }).map((_, idx) => (
-            <RatingButton
-              key={idx}
-              size={24}
-              className={cn(errors.rating_taste && "text-destructive")}
-            />
-          ))}
-        </RatingInput>
-        {errors.rating_taste && (
-          <p className="text-destructive -mt-1 text-xs font-semibold">
-            Eingabe benötigt
-          </p>
-        )}
-      </div>
-
-      <div className="mt-2">
-        <Label className="text-sm font-semibold" htmlFor="rating_look">
-          Optik:
-        </Label>
-        <RatingInput
-          id="rating_look"
-          onValueChange={(val) => setValue("rating_look", val)}
-          {...register("rating_look")}
-        >
-          {Array.from({ length: 5 }).map((_, idx) => (
-            <RatingButton
-              key={idx}
-              size={24}
-              className={cn(errors.rating_look && "text-destructive")}
-            />
-          ))}
-        </RatingInput>
-        {errors.rating_look && (
-          <p className="text-destructive -mt-1 text-xs font-semibold">
-            Eingabe benötigt
-          </p>
-        )}
-      </div>
-
-      <div>
-        <Label className="text-sm font-semibold" htmlFor="rating_price">
-          Preis:
-        </Label>
-        <RatingInput
-          id="rating_price"
-          onValueChange={(val) => setValue("rating_price", val)}
-          {...register("rating_price")}
-        >
-          {Array.from({ length: 5 }).map((_, idx) => (
-            <RatingButton
-              key={idx}
-              size={24}
-              className={cn(errors.rating_price && "text-destructive")}
-            />
-          ))}
-        </RatingInput>
-        {errors.rating_price && (
-          <p className="text-destructive -mt-1 text-xs font-semibold">
-            Eingabe benötigt
-          </p>
-        )}
-      </div>
-
-      <div>
-        <Label className="text-sm font-semibold" htmlFor="rating_taste">
-          Kommentar (optional)
-        </Label>
-        <Textarea
-          {...register("comment", {
-            onChange: (e) => setCommentLength(e.target.value.length),
-          })}
-          className="h-32"
-          placeholder="Hinterlasse einen optionalen Kommentar"
-        />
-        <p className="text-muted-foreground text-xs">{commentLength}/1000</p>
-      </div>
-
-      <Button
-        type="submit"
-        loading={isLoading}
-        className={cn("bg-card w-full cursor-pointer")}
-        variant="outline"
-      >
-        Bewerten
-      </Button>
-    </form>
+          Bewerten
+        </Button>
+      </form>
+    </div>
   );
 }

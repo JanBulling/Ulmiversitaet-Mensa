@@ -1,16 +1,16 @@
 import { Table, TableBody, TableCell, TableRow } from "@/ui/table";
 
-interface NutritionalValuesProps {
-  calories?: string | null;
-  protein?: string | null;
-  fat?: string | null;
-  saturatedFat?: string | null;
-  carbohydrates?: string | null;
-  sugar?: string | null;
-  salt?: string | null;
+interface NutritionDisplayProps {
+  calories: string;
+  protein: string;
+  fat: string;
+  saturatedFat: string;
+  carbohydrates: string;
+  sugar: string;
+  salt: string;
 }
 
-export function NutritionalValues({
+export default function NutritionDisplay({
   calories,
   protein,
   fat,
@@ -18,13 +18,17 @@ export function NutritionalValues({
   carbohydrates,
   sugar,
   salt,
-}: NutritionalValuesProps) {
+}: NutritionDisplayProps) {
   return (
-    <div className="w-full py-8">
-      <h2 className="text-2xl font-bold tracking-tight">Nährwerte</h2>
-      <p className="text-muted-foreground text-sm">pro Portion</p>
+    <div className="bg-card rounded border px-4 py-2 shadow">
+      <h2 className="font-semibold">
+        Nährwerte{" "}
+        <span className="text-muted-foreground text-sm font-normal">
+          (pro Portion)
+        </span>
+      </h2>
 
-      <Table className="mt-2 w-full md:max-w-xs">
+      <Table className="mt-1 w-full md:max-w-xs">
         <TableBody>
           <TableRow>
             <TableCell>Energie</TableCell>

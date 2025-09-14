@@ -7,7 +7,7 @@ export function useStorage<T>(key: string, defaultValue: T) {
   React.useEffect(() => {
     const stored = Storage.get<T>(key, defaultValue);
     setValue(stored);
-  }, [key, defaultValue]);
+  }, [key]);
 
   const update = (newValue: T) => {
     setValue(newValue);
