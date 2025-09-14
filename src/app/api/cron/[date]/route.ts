@@ -31,14 +31,10 @@ export async function GET(
       await saveMealsToDb(mealPlan, selectedDate);
 
       // revalidate cache for the selected day and for all meals for that day
-      // revalidatePath(`/api/v1/${dateToString(selectedDate)}`);
       mealPlan.forEach((meal) =>
         revalidatePath(`/meal/${generateSlug(meal.name)}`),
       );
       revalidateTag(`mensa-menu`);
-      // if (dateToString(new Date()) === dateToString(selectedDate)) {
-      //   revalidatePath("/api/v1/today");
-      // }
 
       return new Response("Success", { status: 200 });
     } catch (err) {

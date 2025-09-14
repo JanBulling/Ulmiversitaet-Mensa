@@ -17,6 +17,9 @@ import { Rating } from "@/ui/rating";
 import RatingForm from "@/components/meal/rating-form";
 import PriceDisplay from "@/components/meal/price-display";
 
+export const revalidate = 86400;
+export const dynamic = "force-static";
+
 const dateFormatter = Intl.DateTimeFormat("de-DE", {
   dateStyle: "medium",
   timeStyle: "short",

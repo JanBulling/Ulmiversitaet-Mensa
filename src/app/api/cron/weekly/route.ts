@@ -6,7 +6,7 @@ import { env } from "@/env.mjs";
 import { saveMealsToDb } from "@/lib/db-integration/save-to-db";
 import { parseMensaHTML } from "@/lib/scraper/studienwerk-parser";
 import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
-import { getStartOfWeek } from "@/lib/utils";
+import { generateSlug, getStartOfWeek } from "@/lib/utils";
 
 /**
  * Runs every Monday at 5:00 AM (CRON: 0 5 * * 1)
@@ -35,9 +35,9 @@ export async function GET(request: NextRequest) {
         const mensaHTML = await getMensaHTML({ date: mealDate, lang: "de" });
         const mealPlan = parseMensaHTML(mensaHTML);
 
-        // revalidate cache for the selected day
-        // revalidatePath(`/api/v1/${dateToString(mealDate)}`);
-        // revalidateTag(`mensa-menu-${dateToString(mealDate)}`);
+        mealPlan.forEach((meal) =>
+          revalidatePath(`/meal/${generateSlug(meal.name)}`),
+        );
 
         await saveMealsToDb(mealPlan, mealDate);
       }
