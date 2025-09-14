@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
     const origin = req.headers.get("origin");
     if (!origin || !corsHeaders.includes(origin))
       return new Response("Unauthorized", { status: 400 });
+    console.info("[GURU - GET]", "Request for guru from origin", origin);
 
     const menuToday = await getMenuForDate(dateToString(new Date()));
     const guruContent = menuToGuruFormat(menuToday);
@@ -32,7 +33,7 @@ export async function GET(req: NextRequest) {
       { message: guruAnswer },
       {
         headers: {
-          "Access-Control-Allow-Origin": origin,
+          "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
         },
       },
