@@ -31,6 +31,7 @@ export async function GET(
       await saveMealsToDb(mealPlan, selectedDate);
 
       // revalidate cache for the selected day and for all meals for that day
+      console.info("[CRON/[date] - GET]", "Revalidating data");
       mealPlan.forEach((meal) =>
         revalidatePath(`/meal/${generateSlug(meal.name)}`),
       );

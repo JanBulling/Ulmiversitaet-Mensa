@@ -41,6 +41,7 @@ export async function GET(request: NextRequest) {
 
         await saveMealsToDb(mealPlan, mealDate);
       }
+      console.info("[CRON/WEEKLY - GET]", "Revalidating data");
       revalidateTag("mensa-menu");
 
       return new Response("Success", { status: 200 });

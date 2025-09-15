@@ -5,14 +5,19 @@ import { db } from "../db/db";
 import { mealsTable, mensaPlanTable } from "../db/schema";
 import { mealCategories, MensaMenu } from "@/types/category";
 
-export const getMenuForDate = cache(
-  async (date: string) => getMenuForDateFromDb(date),
-  undefined,
-  {
-    tags: ["mensa-menu"],
-    revalidate: 86400,
-  },
-);
+export async function getMenuForDate(date: string) {
+  const cachedFunction = cache(
+    async (date: string) => getMenuForDateFromDb(date),
+    [date],
+    {
+      tags: ["mensa-menu", `mensa-menu-${date}`],
+      revalidate: 86400,
+    },
+  );
+
+  const result = await cachedFunction(date);
+  return result;
+}
 
 async function getMenuForDateFromDb(date: string): Promise<MensaMenu> {
   const mealDate = new Date(date);

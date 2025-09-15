@@ -69,6 +69,7 @@ export async function POST(req: Request) {
       })
       .where(eq(mealsTable.id, ratingData.id));
 
+    console.info("[RATING - POST]", "Revalidating data");
     revalidateTag("mensa-menu");
     revalidatePath(`/meal/${meal.slug}`);
 
