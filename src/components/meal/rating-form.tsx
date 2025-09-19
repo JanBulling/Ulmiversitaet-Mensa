@@ -15,6 +15,7 @@ import { useStorage } from "@/hooks/use-storage";
 interface Props {
   mealId: string;
   slug: string;
+  mealDate?: Date;
   className?: string;
 }
 
@@ -27,11 +28,54 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function RatingForm({ mealId, slug, className }: Props) {
+function mealRatingPossible(mealLastServed?: Date): {
+  ratable: boolean;
+  message?: string;
+} {
+  const now = new Date();
+
+  const isFuture = !mealLastServed || mealLastServed > now;
+  if (isFuture)
+    return {
+      ratable: false,
+      message: "Zukünftige Gerichte können noch nicht bewertet werden!",
+    };
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  const isInPast = yesterday >= mealLastServed;
+  if (isInPast)
+    return {
+      ratable: false,
+      message: "Gericht liegt zu weit in der Vergangenheit",
+    };
+
+  const elevenThirty = new Date();
+  elevenThirty.setHours(11, 30, 0, 0);
+
+  if (now < elevenThirty)
+    return {
+      ratable: false,
+      message: "Gerichte können nicht vor 11:30 Uhr bewertet werden!",
+    };
+
+  return { ratable: true };
+}
+
+export default function RatingForm({
+  mealId,
+  slug,
+  mealDate,
+  className,
+}: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [commentLength, setCommentLength] = React.useState<number>(0);
   const [alreadyRated, setAlreadyRated] = useStorage<string[]>("ratings", []);
+
+  const ratingTimeWindowOpen = mealRatingPossible(mealDate);
 
   const {
     register,
@@ -66,6 +110,16 @@ export default function RatingForm({ mealId, slug, className }: Props) {
       <div className={cn("bg-card rounded border px-4 py-8 shadow", className)}>
         <p className="text-muted-foreground text-center text-sm">
           Du hast dieses Gericht bereits bewertet
+        </p>
+      </div>
+    );
+  }
+
+  if (!ratingTimeWindowOpen.ratable) {
+    return (
+      <div className="bg-card rounded border px-2 py-8 shadow md:px-4">
+        <p className="text-muted-foreground text-center text-sm">
+          {ratingTimeWindowOpen.message}
         </p>
       </div>
     );

@@ -17,7 +17,7 @@ import { Rating } from "@/ui/rating";
 import RatingForm from "@/components/meal/rating-form";
 import PriceDisplay from "@/components/meal/price-display";
 
-export const revalidate = 86400;
+export const revalidate = 7200;
 export const dynamic = "force-static";
 
 const dateFormatter = Intl.DateTimeFormat("de-DE", {
@@ -44,18 +44,20 @@ export default async function MealPage({
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-  const mealFromPastData = await db
-    .select({ count: sql<number>`count(*)` })
+  const lastServedDateData = await db
+    .select({ date: mensaPlanTable.date })
     .from(mensaPlanTable)
     .where(
       and(
         eq(mensaPlanTable.meal_id, meal.id),
         lte(mensaPlanTable.date, new Date()),
-        gte(mensaPlanTable.date, oneWeekAgo),
       ),
-    );
-  const isFromPast =
-    mealFromPastData.length === 1 && mealFromPastData[0].count >= 1;
+    )
+    .orderBy(desc(mensaPlanTable.date))
+    .limit(1);
+
+  const lastServedDate =
+    lastServedDateData.length === 1 ? lastServedDateData[0].date : undefined;
 
   const comments = await db
     .select()
@@ -139,15 +141,13 @@ export default async function MealPage({
       <div className="mt-4 mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <h2 className="text-xl font-semibold">Hinterlasse eine Bewertung</h2>
-          {isFromPast ? (
-            <RatingForm className="mt-1" slug={meal.slug} mealId={meal.id} />
-          ) : (
-            <div className="bg-card rounded border px-2 py-8 shadow md:px-4">
-              <p className="text-muted-foreground text-center text-sm">
-                Zukünftige Gerichte können noch nicht bewertet werden!
-              </p>
-            </div>
-          )}
+
+          <RatingForm
+            className="mt-1"
+            slug={meal.slug}
+            mealId={meal.id}
+            mealDate={lastServedDate}
+          />
         </div>
 
         <div>
