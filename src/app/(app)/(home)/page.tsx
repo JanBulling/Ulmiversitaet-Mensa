@@ -37,16 +37,28 @@ export default function HomePage({
 }) {
   const router = useRouter();
 
+  const resolvedParams = React.use(searchParams);
+
   const initialDate =
-    parseDateFromString(React.use(searchParams).date) ||
-    adjustToNextWeekday(new Date());
+    parseDateFromString(resolvedParams.date) || adjustToNextWeekday(new Date());
 
   const [selectedDate, setSelectedDate] = React.useState<Date>(initialDate);
 
   // Sync URL when date changes
   React.useEffect(() => {
     const dateStr = dateToString(selectedDate);
-    router.replace(`?date=${dateStr}`, { scroll: false });
+
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(resolvedParams)) {
+      if (typeof value === "string") {
+        params.set(key, value);
+      } else if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v));
+      }
+    }
+    params.set("date", dateStr);
+
+    router.replace(`?${params.toString()}`, { scroll: false });
   }, [selectedDate, router]);
 
   const { data, error, isLoading } = useSWR<{

@@ -1,12 +1,16 @@
 import { Button } from "@/ui/button";
 import Logo from "@/ui/logo";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export function SiteFooter() {
   return (
     <footer className="bg-card border-t">
       <div className="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-2 px-4 pt-4 pb-1 md:flex-row md:px-12">
-        <Logo size="sm" />
+        <Suspense>
+          <Logo size="sm" />
+        </Suspense>
+
         <div className="text-muted-foreground text-sm">
           Ein Service der{" "}
           <Link className="hover:underline" href="https://ulmiversitaet.de">

@@ -11,6 +11,7 @@ import { Button } from "@/ui/button";
 import { Textarea } from "@/ui/input/textarea";
 import { useRouter } from "next/navigation";
 import { useStorage } from "@/hooks/use-storage";
+import { Loader2 } from "lucide-react";
 
 interface Props {
   mealId: string;
@@ -128,7 +129,7 @@ export default function RatingForm({
   return (
     <div className={cn("bg-card rounded border px-4 py-4 shadow", className)}>
       <form onSubmit={handleSubmit(onSubmit)} className="pace-y-2">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-x-4 sm:grid-cols-3">
           <div>
             <Label className="text-sm font-semibold">Geschmack</Label>
             <RatingInput
@@ -200,10 +201,10 @@ export default function RatingForm({
 
         <Button
           type="submit"
-          loading={isLoading}
           className={cn("bg-card w-full cursor-pointer")}
           variant="outline"
         >
+          {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           Bewerten
         </Button>
       </form>

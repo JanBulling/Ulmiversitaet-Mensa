@@ -1,5 +1,8 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface LogoProps {
   className?: string;
@@ -40,16 +43,23 @@ const sizeMap = {
   },
 };
 
+const linkMap: Record<string, string> = {
+  ulmiversitaet: "https://www.ulmiversitaet.de",
+  ulmiversität: "https://www.ulmiversitaet.de",
+};
+
 export default function Logo({
   className,
   size = "md",
   textHiddenOnSmall,
 }: LogoProps) {
+  const searchParams = useSearchParams();
+  const utmSource = searchParams.get("utm");
+
+  const link = utmSource ? (linkMap[utmSource] ?? "/") : "/";
+
   return (
-    <Link
-      href="https://ulmiversitaet.de"
-      className="relative flex items-center gap-2"
-    >
+    <Link href={link} className="relative flex items-center gap-2">
       <img
         src="/logo.png"
         alt="Ulmiversität Logo"

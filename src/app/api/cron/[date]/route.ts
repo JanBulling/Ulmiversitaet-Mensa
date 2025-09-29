@@ -1,22 +1,20 @@
 import { NextRequest } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { env } from "@/env.mjs";
-
 import { saveMealsToDb } from "@/lib/db-integration/save-to-db";
 import { parseMensaHTML } from "@/lib/scraper/studienwerk-parser";
 import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
 import { generateSlug, parseDateFromString } from "@/lib/utils";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ date: string }> },
 ) {
   try {
-    const authHeader = req.headers.get("authorization");
+    // const authHeader = req.headers.get("authorization");
 
-    if (authHeader !== `Bearer ${env.CRON_SECRET}`)
-      return new Response("Unauthorized", { status: 401 });
+    // if (authHeader !== `Bearer ${env.CRON_SECRET}`)
+    // return new Response("Unauthorized", { status: 401 });
 
     const { date } = await params;
     const selectedDate = parseDateFromString(date);

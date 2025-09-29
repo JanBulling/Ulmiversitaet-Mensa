@@ -29,7 +29,10 @@ export const Rating = ({
           key: idx,
           size,
           ...props,
-          className: cn(value - 0.5 >= idx && "fill-current"),
+          className: cn(
+            value - 0.5 >= idx && "fill-current",
+            icon.props.className,
+          ),
           "aria-hidden": true,
         }),
       )}

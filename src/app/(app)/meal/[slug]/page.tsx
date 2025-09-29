@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { and, eq, isNotNull, ne, desc, lte, gte, sql } from "drizzle-orm";
+import { and, eq, isNotNull, ne, desc, lte } from "drizzle-orm";
 
 import { db } from "@/lib/db/db";
 import { mealsTable, mensaPlanTable, ratingsTable } from "@/lib/db/schema";
@@ -9,7 +9,7 @@ import { CategoryIcon } from "@/components/icons/category-icon";
 import { mealCategoryColorMap } from "@/types/category";
 import { MealTypeIcon } from "@/components/icons/meal-type-icon";
 import { mealTypeColorMap } from "@/types/meal-types";
-import { capitalize, cn } from "@/lib/utils";
+import { capitalize } from "@/lib/utils";
 import RatingDisplay from "@/components/meal/rating-display";
 import NutritionDisplay from "@/components/meal/nutrition-display";
 import AllergiesDisplay from "@/components/meal/allergies-display";

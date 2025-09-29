@@ -1,7 +1,9 @@
+export const BASE_URL = "https://mensa.ulmiversitaet.de";
+
 export const siteConfig = {
   name: "Mensa Ulm",
-  url: "https://mensa.ulmiversitaet.de",
-  ogImage: "https://mensa.ulmiversitaet.de/og",
+  url: BASE_URL,
+  ogImage: `${BASE_URL}/og`,
   description: "Mensaplan der Universität Ulm",
   links: {
     github: "https://github.com/janbulling/ulmiversitaet-mensa",
@@ -16,4 +18,8 @@ export const META_THEME_COLORS = {
   dark: "#09090b",
 };
 
-export const navItems = [];
+export const navItems = [
+  { href: "/", label: "Alle Gerichte" },
+  { href: "/best-meals", label: "Beste Gerichte" },
+  { href: "/worst-meals", label: "Schlechteste Gerichte" },
+];
