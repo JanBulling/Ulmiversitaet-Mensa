@@ -1,9 +1,7 @@
 import SiteLayout from "@/components/general/site-layout";
-import { db } from "@/lib/db/db";
-import { mealsTable } from "@/lib/db/schema";
+import { getTop10Meals } from "@/lib/top-meals";
 import { cn } from "@/lib/utils";
 import { Rating } from "@/ui/rating";
-import { desc, isNotNull } from "drizzle-orm";
 import { StarIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -11,12 +9,7 @@ export const revalidate = 21600;
 export const dynamic = "force-static";
 
 export default async function BestMealPage() {
-  const bestMeals = await db
-    .select()
-    .from(mealsTable)
-    .where(isNotNull(mealsTable.rating_total))
-    .orderBy(desc(mealsTable.rating_total))
-    .limit(10);
+  const bestMeals = await getTop10Meals();
 
   return (
     <SiteLayout>

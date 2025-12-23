@@ -3,7 +3,34 @@ import jsdom from "jsdom";
 import { parseCategoryDiv } from "./parsers/category-parser";
 import { parseMealDiv } from "./parsers/meal-parser";
 
-export function parseMensaHTML(htmlString: string): Meal[] {
+export function parseMensa(
+  htmlString: string,
+  options?: { en?: string },
+): Meal[] {
+  const mealsDe = parseMensaHTML(htmlString);
+
+  if (!options?.en) return mealsDe;
+  const mealsEn = parseMensaHTML(options.en);
+
+  // Merge the English names into the German meals
+  const mergedMeals: Meal[] = mealsDe.map((mealDe) => {
+    const mealEn = mealsEn.find(
+      (m) =>
+        m.category === mealDe.category &&
+        m.prices.student === mealDe.prices.student &&
+        m.nutrition.calories === mealDe.nutrition.calories &&
+        m.nutrition.fat === mealDe.nutrition.fat,
+    );
+    return {
+      ...mealDe,
+      nameEn: mealEn?.name,
+    };
+  });
+
+  return mergedMeals;
+}
+
+function parseMensaHTML(htmlString: string): Meal[] {
   const meals: Meal[] = [];
 
   const dom = new jsdom.JSDOM(htmlString);

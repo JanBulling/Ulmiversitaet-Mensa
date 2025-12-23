@@ -1,22 +1,15 @@
 import SiteLayout from "@/components/general/site-layout";
-import { db } from "@/lib/db/db";
-import { mealsTable } from "@/lib/db/schema";
+import { getWorse10Meals } from "@/lib/top-meals";
 import { cn } from "@/lib/utils";
 import { Rating } from "@/ui/rating";
-import { asc, isNotNull } from "drizzle-orm";
 import { StarIcon } from "lucide-react";
 import Link from "next/link";
 
 export const revalidate = 21600;
 export const dynamic = "force-static";
 
-export default async function BestMealPage() {
-  const bestMeals = await db
-    .select()
-    .from(mealsTable)
-    .where(isNotNull(mealsTable.rating_total))
-    .orderBy(asc(mealsTable.rating_total))
-    .limit(10);
+export default async function WorseMealPage() {
+  const worseMeals = await getWorse10Meals();
 
   return (
     <SiteLayout>
@@ -32,7 +25,7 @@ export default async function BestMealPage() {
       </p>
 
       <ol className="my-4 divide-y">
-        {bestMeals.map((m, idx) => (
+        {worseMeals.map((m, idx) => (
           <Link key={m.id} href={`/meal/${m.slug}`}>
             <li
               className={cn(

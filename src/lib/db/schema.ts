@@ -28,7 +28,8 @@ export const mealsTable = pgTable(
     slug: text("slug").notNull().unique(),
 
     name: text("name").notNull(),
-    // date: date("date", { mode: "date" }).notNull(),
+    name_en: text("name_en"),
+
     category: mealCategoriesEnum("category").notNull(),
 
     types: mealTypesEnum("types").array().notNull(),
@@ -105,3 +106,11 @@ export const ratingsTable = pgTable(
   },
   (table) => [index("rating_meal_id_idx").on(table.meal_id)],
 );
+
+export const priceTrackingTable = pgTable("price_tracking", {
+  id: serial("id").primaryKey(),
+  date: date("date", { mode: "date" }).notNull().unique(),
+  avg_price_student: real("avg_price_student"),
+  avg_price_employee: real("avg_price_employee"),
+  avg_price_others: real("avg_price_others"),
+});

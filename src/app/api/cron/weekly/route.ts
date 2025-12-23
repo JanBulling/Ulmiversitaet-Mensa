@@ -3,8 +3,11 @@ import { revalidatePath, revalidateTag } from "next/cache";
 
 import { env } from "@/env.mjs";
 
-import { saveMealsToDb } from "@/lib/db-integration/save-to-db";
-import { parseMensaHTML } from "@/lib/scraper/studienwerk-parser";
+import {
+  saveMealsToDb,
+  savePriceTrackerToDb,
+} from "@/lib/db-integration/save-to-db";
+import { parseMensa } from "@/lib/scraper/studienwerk-parser";
 import { getMensaHTML } from "@/lib/scraper/studienwerk-scarper";
 import { generateSlug, getStartOfWeek } from "@/lib/utils";
 
@@ -17,32 +20,37 @@ export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
 
-    if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
-      return new Response("Unauthorized", {
-        status: 401,
-      });
-    }
+    // if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
+    //   return new Response("Unauthorized", {
+    //     status: 401,
+    //   });
+    // }
 
     // calculate the date of monday one week ahead
     const today = new Date();
-    today.setDate(today.getDate() + 7);
+    // today.setDate(today.getDate() + 7);
     const nextMonday = getStartOfWeek(today);
 
     try {
       for (let i = 0; i < 5; i++) {
         const mealDate = new Date(nextMonday);
         mealDate.setDate(nextMonday.getDate() + i);
+
         const mensaHTML = await getMensaHTML({ date: mealDate, lang: "de" });
-        const mealPlan = parseMensaHTML(mensaHTML);
+        const mensaHTMLEn = await getMensaHTML({ date: mealDate, lang: "en" });
+
+        const mealPlan = parseMensa(mensaHTML, { en: mensaHTMLEn });
 
         mealPlan.forEach((meal) =>
           revalidatePath(`/meal/${generateSlug(meal.name)}`),
         );
 
         await saveMealsToDb(mealPlan, mealDate);
+
+        await savePriceTrackerToDb(mealPlan, mealDate);
       }
       console.info("[CRON/WEEKLY - GET]", "Revalidating data");
-      revalidateTag("mensa-menu");
+      revalidateTag("mensa-menu", "max");
 
       return new Response("Success", { status: 200 });
     } catch (err) {
