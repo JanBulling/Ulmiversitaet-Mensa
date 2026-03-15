@@ -3,7 +3,7 @@ import { generateSlug } from "../utils";
 
 import { db } from "../db/db";
 import { mealsTable, mensaPlanTable, priceTrackingTable } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 export async function saveMealsToDb(meals: Meal[], date?: Date) {
   const mealsDate = date || new Date();
@@ -13,14 +13,15 @@ export async function saveMealsToDb(meals: Meal[], date?: Date) {
 
     // Check if the meal already exists in the database
     const existingMeal = await db
-      .select({ id: mealsTable.id })
+      .select({ id: mealsTable.id, name: mealsTable.name, similarity: sql<number>`similarity(name, ${meal.name}) AS sim` })
       .from(mealsTable)
-      .where(eq(mealsTable.slug, mealSlug));
-
-    let mealId = existingMeal.length === 1 ? existingMeal[0].id : null;
+      .where(sql`similarity(name, ${meal.name}) > 0.75`)
+      .limit(1);
+    
+    let mealId = existingMeal.length >= 1 ? existingMeal[0].id : null;
 
     // If the meal already exists, update it
-    if (existingMeal.length === 1) {
+    if (mealId) {
       await db
         .update(mealsTable)
         .set({
@@ -41,7 +42,7 @@ export async function saveMealsToDb(meals: Meal[], date?: Date) {
           nutrition_saturated_fat: meal.nutrition.saturatedFat,
           nutrition_salt: meal.nutrition.salt,
         })
-        .where(eq(mealsTable.slug, mealSlug));
+        .where(eq(mealsTable.id, mealId));
     } else {
       const response = await db
         .insert(mealsTable)

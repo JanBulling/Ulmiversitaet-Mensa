@@ -25,6 +25,8 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE", {
 
 const useSingleCard: MealCategory[] = [
   "SATTMACHER",
+  "VEGETARISCH",
+  "VEGAN",
   "PRIMA KLIMA",
   "FLEISCH UND FISCH",
   "TOPF UND PFANNE",

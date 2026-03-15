@@ -41,6 +41,7 @@ async function getMenuForDateFromDb(date: string): Promise<MensaMenu> {
     if (category) {
       category.meals.push({
         name: meal.name,
+        nameEn: meal.name_en ?? undefined,
         types: meal.types,
         prices: {
           student: meal.price_student ?? undefined,
@@ -67,6 +68,7 @@ async function getMenuForDateFromDb(date: string): Promise<MensaMenu> {
         meals: [
           {
             name: meal.name,
+            nameEn: meal.name_en ?? undefined,
             types: meal.types,
             prices: {
               student: meal.price_student ?? undefined,

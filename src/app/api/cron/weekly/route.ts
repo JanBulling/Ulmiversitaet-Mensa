@@ -20,15 +20,15 @@ export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
 
-    // if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
-    //   return new Response("Unauthorized", {
-    //     status: 401,
-    //   });
-    // }
+    if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
+      return new Response("Unauthorized", {
+        status: 401,
+      });
+    }
 
     // calculate the date of monday one week ahead
     const today = new Date();
-    // today.setDate(today.getDate() + 7);
+    today.setDate(today.getDate() + 7);
     const nextMonday = getStartOfWeek(today);
 
     try {

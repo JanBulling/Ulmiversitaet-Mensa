@@ -74,7 +74,7 @@ export default function RatingForm({
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [commentLength, setCommentLength] = React.useState<number>(0);
-  const [alreadyRated, setAlreadyRated] = useStorage<string[]>("ratings", []);
+  const [alreadyRated, setAlreadyRated] = useStorage<{s: string; d: string}[]>("ratings", []);
 
   const ratingTimeWindowOpen = mealRatingPossible(mealDate);
 
@@ -103,10 +103,10 @@ export default function RatingForm({
       return;
     }
     router.refresh();
-    setAlreadyRated([...alreadyRated, slug]);
+    setAlreadyRated([...alreadyRated, {s: slug, d: (mealDate ?? new Date()).toISOString().split("T")[0]}]);
   }
 
-  if (alreadyRated.includes(slug)) {
+  if (alreadyRated.some((r) => r.s === slug && r.d === (mealDate?.toISOString().split("T")[0] ?? ""))) {
     return (
       <div className={cn("bg-card rounded border px-4 py-8 shadow", className)}>
         <p className="text-muted-foreground text-center text-sm">
@@ -203,6 +203,7 @@ export default function RatingForm({
           type="submit"
           className={cn("bg-card w-full cursor-pointer")}
           variant="outline"
+          disabled={isLoading}
         >
           {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           Bewerten
