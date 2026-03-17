@@ -1,4 +1,4 @@
-import { cn, generateSlug } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Category, mealCategoryColorMap } from "@/types/category";
 import { CategoryIcon } from "../icons/category-icon";
 import Link from "next/link";
@@ -31,7 +31,7 @@ export default function MensaCategoryCard({
   const priceString = `${meal.prices.note ?? ""} ${priceType === "EMPLOYEE" ? meal.prices.employee : priceType === "OTHER" ? meal.prices.others : meal.prices.student}€`;
 
   return (
-    <Link key={meal.name} href={`/meal/${generateSlug(meal.name)}`}>
+    <Link key={meal.name} href={`/meal/${meal.slug}`}>
       <div
         className={cn(
           "h-full cursor-pointer rounded-md px-4 py-2 shadow-sm",

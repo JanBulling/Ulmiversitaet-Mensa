@@ -4,6 +4,7 @@ import { MealType } from "./meal-types";
 
 export type Meal = {
   name: string;
+  slug?: string;
   nameEn?: string;
   category: MealCategory;
   prices: {
