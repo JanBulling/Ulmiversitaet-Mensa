@@ -12,7 +12,7 @@ import {
 import { fetcher } from "@/lib/fetcher";
 import DateSelector from "@/components/home/date-selector";
 import SiteLayout from "@/components/general/site-layout";
-import { MealCategory, MensaMenu } from "@/types/category";
+import { mainDishCategories, MealCategory, MensaMenu } from "@/types/category";
 
 import { Skeleton } from "@/ui/skeleton";
 import MensaCategoryList from "@/components/home/category-list";
@@ -23,14 +23,7 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE", {
   dateStyle: "full",
 });
 
-const useSingleCard: MealCategory[] = [
-  "SATTMACHER",
-  "VEGETARISCH",
-  "VEGAN",
-  "PRIMA KLIMA",
-  "FLEISCH UND FISCH",
-  "TOPF UND PFANNE",
-];
+const useSingleCard: MealCategory[] = mainDishCategories;
 
 export default function HomePage({
   searchParams,

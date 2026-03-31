@@ -4,6 +4,7 @@ import { generateSlug } from "../utils";
 import { db } from "../db/db";
 import { mealsTable, mensaPlanTable, priceTrackingTable } from "../db/schema";
 import { desc, eq, sql } from "drizzle-orm";
+import { mainDishCategories, sideDishCategories } from "@/types/category";
 
 export async function saveMealsToDb(meals: Meal[], date?: Date) {
   const mealsDate = date || new Date();
@@ -13,11 +14,15 @@ export async function saveMealsToDb(meals: Meal[], date?: Date) {
 
     // Check if the meal already exists in the database
     const existingMeal = await db
-      .select({ id: mealsTable.id, name: mealsTable.name, similarity: sql<number>`similarity(name, ${meal.name}) AS sim` })
+      .select({
+        id: mealsTable.id,
+        name: mealsTable.name,
+        similarity: sql<number>`similarity(name, ${meal.name}) AS sim`,
+      })
       .from(mealsTable)
       .where(sql`similarity(name, ${meal.name}) > 0.75`)
       .limit(1);
-    
+
     let mealId = existingMeal.length >= 1 ? existingMeal[0].id : null;
 
     // If the meal already exists, update it
@@ -95,18 +100,14 @@ export async function saveMealsToDb(meals: Meal[], date?: Date) {
 export async function savePriceTrackerToDb(meals: Meal[], date: Date) {
   const mealsDate = date || new Date();
 
-  const mainDishesCategories = [
-    "SATTMACHER",
-    "TOPF UND PFANNE",
-    "PRIMA KLIMA",
-    "FLEISCH UND FISCH",
-    "PIZZA",
-    "PASTA",
-    "SNACKS",
-  ];
-
   const mainDishes = meals.filter((meal) =>
-    mainDishesCategories.includes(meal.category),
+    mainDishCategories.includes(meal.category),
+  );
+
+  const desserts = meals.filter((meal) => meal.category === "DESSERT");
+
+  const sideDishes = meals.filter((meal) =>
+    sideDishCategories.includes(meal.category),
   );
 
   if (mainDishes.length === 0) {
@@ -117,15 +118,23 @@ export async function savePriceTrackerToDb(meals: Meal[], date: Date) {
     return;
   }
 
+  console.log(sideDishes);
+
   const avgPriceStudent =
     mainDishes.reduce((sum, meal) => +(meal.prices.student ?? "0") + sum, 0) /
-    mainDishes.length;
+    (mainDishes.length || 1);
   const avgPriceEmployee =
     mainDishes.reduce((sum, meal) => +(meal.prices.employee ?? "0") + sum, 0) /
-    mainDishes.length;
+    (mainDishes.length || 1);
   const avgPriceOthers =
     mainDishes.reduce((sum, meal) => +(meal.prices.others ?? "0") + sum, 0) /
-    mainDishes.length;
+    (mainDishes.length || 1);
+  const avgPriceDesserts =
+    desserts.reduce((sum, meal) => +(meal.prices.student ?? "0") + sum, 0) /
+    (desserts.length || 1);
+  const avgPriceSides =
+    sideDishes.reduce((sum, meal) => +(meal.prices.student ?? "0") + sum, 0) /
+    (sideDishes.length || 1);
 
   await db
     .insert(priceTrackingTable)
@@ -134,6 +143,8 @@ export async function savePriceTrackerToDb(meals: Meal[], date: Date) {
       avg_price_student: avgPriceStudent,
       avg_price_employee: avgPriceEmployee,
       avg_price_others: avgPriceOthers,
+      avg_price_deserts: avgPriceDesserts,
+      avg_price_sides: avgPriceSides,
     })
     .onConflictDoUpdate({
       target: [priceTrackingTable.date],
@@ -141,6 +152,8 @@ export async function savePriceTrackerToDb(meals: Meal[], date: Date) {
         avg_price_student: avgPriceStudent,
         avg_price_employee: avgPriceEmployee,
         avg_price_others: avgPriceOthers,
+        avg_price_deserts: avgPriceDesserts,
+        avg_price_sides: avgPriceSides,
       },
     });
 }

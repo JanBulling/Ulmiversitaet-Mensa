@@ -1,6 +1,7 @@
 import { and, desc, isNotNull, gte, inArray, asc } from "drizzle-orm";
 import { db } from "./db/db";
 import { mealsTable } from "./db/schema";
+import { mainDishCategories } from "@/types/category";
 
 export async function getTop10Meals() {
   const topMeals = await db
@@ -10,15 +11,7 @@ export async function getTop10Meals() {
       and(
         isNotNull(mealsTable.rating_total),
         gte(mealsTable.num_ratings, 2),
-        inArray(mealsTable.category, [
-          "SATTMACHER",
-          "TOPF UND PFANNE",
-          "PRIMA KLIMA",
-          "FLEISCH UND FISCH",
-          "PIZZA",
-          "PASTA",
-          "SNACKS",
-        ]),
+        inArray(mealsTable.category, mainDishCategories),
       ),
     )
     .orderBy(desc(mealsTable.rating_total))
@@ -48,15 +41,7 @@ export async function getWorse10Meals() {
       and(
         isNotNull(mealsTable.rating_total),
         gte(mealsTable.num_ratings, 2),
-        inArray(mealsTable.category, [
-          "SATTMACHER",
-          "TOPF UND PFANNE",
-          "PRIMA KLIMA",
-          "FLEISCH UND FISCH",
-          "PIZZA",
-          "PASTA",
-          "SNACKS",
-        ]),
+        inArray(mealsTable.category, mainDishCategories),
       ),
     )
     .orderBy(asc(mealsTable.rating_total))

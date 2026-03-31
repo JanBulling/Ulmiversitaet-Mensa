@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Category } from "@/types/category";
+import { Category, mainDishCategories } from "@/types/category";
 import DateSelector from "./date-selector";
 import MensaCategoryCard from "./category-card";
 import { Skeleton } from "@/ui/skeleton";
@@ -20,12 +20,7 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE", {
   dateStyle: "full",
 });
 
-const useSingleCard: MealCategory[] = [
-  "SATTMACHER",
-  "PRIMA KLIMA",
-  "FLEISCH UND FISCH",
-  "TOPF UND PFANNE",
-];
+const useSingleCard: MealCategory[] = mainDishCategories;
 
 export function MensaMenu({ initialMenu, initialDate }: MensaMenuProps) {
   const [mensaMenu, setMensaMenu] = React.useState<Category[]>(initialMenu);

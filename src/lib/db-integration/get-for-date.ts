@@ -31,6 +31,8 @@ async function getMenuForDateFromDb(date: string): Promise<MensaMenu> {
     .innerJoin(mensaPlanTable, eq(mensaPlanTable.meal_id, mealsTable.id))
     .where(eq(mensaPlanTable.date, mealDate));
 
+  console.log(mealsResponse);
+
   const menu: MensaMenu = [];
 
   mealsResponse.forEach((response) => {

@@ -113,4 +113,7 @@ export const priceTrackingTable = pgTable("price_tracking", {
   avg_price_student: real("avg_price_student"),
   avg_price_employee: real("avg_price_employee"),
   avg_price_others: real("avg_price_others"),
+
+  avg_price_deserts: real("avg_price_deserts"),
+  avg_price_sides: real("avg_price_sides"),
 });

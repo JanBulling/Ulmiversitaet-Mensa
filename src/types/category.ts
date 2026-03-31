@@ -20,13 +20,6 @@ export type Category = {
   meals: Omit<Meal, "category">[];
 };
 
-// GUIDE: ADD MEAL CATEGORY:
-// 1. Add the category to the mealCategories array
-// 2. Update the database schema 
-// 3. Update the mapping in category-parser.ts
-// 4. Add an icon in the mealCategoryIconMap (optional)
-// 5. Add a color in the mealCategoryColorMap (optional)
-// 6. Adjust the useSingleCard array in the homepage if necessary
 export const mealCategories = [
   "SATTMACHER",
   "TOPF UND PFANNE",
@@ -44,6 +37,24 @@ export const mealCategories = [
   "UNKNOWN",
 ] as const;
 
+export const mainDishCategories: MealCategory[] = [
+  "SATTMACHER",
+  "TOPF UND PFANNE",
+  "PRIMA KLIMA",
+  "FLEISCH UND FISCH",
+  "VEGAN",
+  "VEGETARISCH",
+  "PIZZA",
+  "PASTA",
+  "SNACKS",
+] as const;
+
+export const sideDishCategories: MealCategory[] = [
+  "BEILAGE",
+  "SALAT",
+  "SALATBUFFET",
+] as const;
+
 export type MealCategory = (typeof mealCategories)[number];
 
 export const mealCategoryIconMap: Partial<
@@ -58,8 +69,8 @@ export const mealCategoryIconMap: Partial<
   "FLEISCH UND FISCH": Ham,
   "PRIMA KLIMA": Leaf,
   "TOPF UND PFANNE": CookingPot,
-  "VEGAN": Vegan,
-  "VEGETARISCH": Leaf,
+  VEGAN: Vegan,
+  VEGETARISCH: Leaf,
   SALAT: Salad,
   SALATBUFFET: Salad,
   DESSERT: IceCream,
@@ -74,8 +85,8 @@ export const mealCategoryColorMap: Partial<Record<MealCategory, string>> = {
   "FLEISCH UND FISCH": "#ef4444",
   "PRIMA KLIMA": "#22c55e",
   "TOPF UND PFANNE": "#3b82f6",
-  "VEGAN": "#9bbd1d",
-  "VEGETARISCH": "#22c55e",
+  VEGAN: "#9bbd1d",
+  VEGETARISCH: "#22c55e",
   SALAT: "#65a30d",
   SALATBUFFET: "#16a34a",
   BEILAGE: "#525252",

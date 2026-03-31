@@ -8,6 +8,7 @@ import {
   Shrimp,
   Carrot,
   LucideProps,
+  Drumstick,
 } from "lucide-react";
 
 export const mealTypes = [
@@ -39,6 +40,8 @@ export const mealTypeIconMap: Partial<
   GEFLÜGEL: Bird,
   FISCH: Fish,
   TINTENFISCH: Shrimp,
+  LAMM: Drumstick,
+  WILDFLEISCH: Ham,
 };
 export const MealTypeDefaultIcon = null;
 
