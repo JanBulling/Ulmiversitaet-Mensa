@@ -14,8 +14,9 @@ export function parseCategoryDiv(div: Element): MealCategory {
 const mealCategoryMap: Record<MealCategory, string[]> = {
   "TOPF UND PFANNE": ["TOPF", "PFANNE", "TOPF + PFANNE"],
   SATTMACHER: ["SATTMACHER"],
-  "VEGAN": ["VEGAN"],
-  "VEGETARISCH": ["VEGETARISCH"],
+  VEGAN: ["VEGAN"],
+  SPECIALS: ["SPECIALS", "SPECIAL"],
+  VEGETARISCH: ["VEGETARISCH"],
   "PRIMA KLIMA": ["PRIMA", "KLIMA", "PRIMA KLIMA"],
   "FLEISCH UND FISCH": ["FLEISCH", "FISCH", "FLEISCH + FISCH"],
   BEILAGE: ["BEILAGE", "BEILAGEN"],
